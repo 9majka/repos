@@ -1,8 +1,8 @@
 package com.mygdx.sample.object;
 
 
-public class TObject extends Object{
-    private final int celsCount = 5;
+public class GLObject extends Object{
+    private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
         {0,2,8,6},
@@ -12,7 +12,7 @@ public class TObject extends Object{
         {7,3,1,5}
     };
 
-    public TObject() {
+    public GLObject() {
     }
 
     @Override
