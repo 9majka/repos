@@ -9,7 +9,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -39,7 +38,7 @@ public class MyGdxSample implements Screen {
     public MyGdxSample(final Drop gam){
         this.game = gam;
         freek = false;
-        Gdx.input.setInputProcessor(new GestureDetector(new DropGestureListener(this)));
+        //Gdx.input.setInputProcessor(new GestureDetector(new DropGestureListener(this)));
         
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 480, 800);

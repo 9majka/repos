@@ -2,15 +2,12 @@ package com.mygdx.sample.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
-
+import com.mygdx.sample.GameConfig;
 
 public class TObject extends Object{
-    private Array<Rectangle> rects;
     private final int celsCount = 5;
-    
     private int rotationStates[][] = {
         {0,2,8,6},
         {1,5,7,3},
@@ -18,33 +15,29 @@ public class TObject extends Object{
         {4,4,4,4},
         {7,3,1,5}
     };
-    
-    private Array<Texture> textures;
-    
+
     public TObject() {
         initPoints();
         initTextures();
     }
 
     private void initPoints() {
-        rects = new Array<Rectangle>();
+        points = new Array<GridPoint2>();
         int i = 0;
         int j = 0;
         for(int n = 0; n < celsCount; n++) {
-            Rectangle rect = new Rectangle();
+            GridPoint2 point = new GridPoint2();
+            
             int value = rotationStates[n][ObjectRotation.toInt(state)];
             i = value%3;
             j = value/3;
-            rect.x = (i + shiftX) * CELLSIZE;
-            rect.y = j * CELLSIZE + posY;
-            rect.width = CELLSIZE;
-            rect.height = CELLSIZE;
-            rects.add(rect);
+            point.x = i + super.shiftX;
+            point.y = j + super.shiftY;
+            points.add(point);
         }
     }
     
     private void initTextures() {
-        
         textures = new Array<Texture>();
         for(int n = 0; n < celsCount; n++) {
             Texture texture = new Texture(Gdx.files.internal("drop.png"));
@@ -56,21 +49,31 @@ public class TObject extends Object{
     public void dispose() {
 
     }
+
+    private void rotateRects() {
+        int number = 0;
+        int i = 0;
+        int j = 0;
+        for(GridPoint2 point: points) {
+            int value = rotationStates[number][ObjectRotation.toInt(state)];
+            i = value%3;
+            j = value/3;
+            point.x = i + shiftX;
+            point.y = j + shiftY;
+            number++;
+        }
+    }
     
     @Override
     public void rotate(ObjectRotation rot) {
         super.rotate(rot);
-        int number = 0;
-        int i = 0;
-        int j = 0;
-        for(Rectangle rect: rects) {
-            int value = rotationStates[number][ObjectRotation.toInt(state)];
-            i = value%3;
-            j = value/3;
-            rect.x = (i + shiftX) * CELLSIZE;
-            rect.y = j * CELLSIZE + posY;
-            number++;
-        }
+        rotateRects();
+    }
+    
+    @Override
+    public void rotate() {
+        super.rotate();
+        rotateRects();
     }
     
     @Override
@@ -83,11 +86,11 @@ public class TObject extends Object{
     private void movePosY() {
         int j = 0;
         int n = 0;
-        shiftY = (int)posY;
-        for(Rectangle rect: rects) {
+        shiftY = (int)posY/GameConfig.CELLSIZE;
+        for(GridPoint2 point: points) {
             int value = rotationStates[n][ObjectRotation.toInt(state)];
             j = value/3;
-            rect.y = j * CELLSIZE + posY;
+            point.y = j + shiftY;
             n++;
         }
     }
@@ -95,10 +98,10 @@ public class TObject extends Object{
     private void shiftPosX() {
         int i = 0;
         int n = 0;
-        for(Rectangle rect: rects) {
+        for(GridPoint2 point: points) {
             int value = rotationStates[n][ObjectRotation.toInt(state)];
             i = value%3;
-            rect.x = (i + shiftX) * CELLSIZE;
+            point.x = (i + shiftX);
             n++;
         }
     }
@@ -113,15 +116,6 @@ public class TObject extends Object{
     public void moveDownDelta(float delta) {
         super.moveDownDelta(delta);
         movePosY();
-    }
-    
-    @Override
-    public void draw(SpriteBatch batch) {
-      
-        for(Texture texture: textures) {
-            Rectangle rect = rects.get(textures.indexOf(texture, true));
-            batch.draw(texture, rect.x, rect.y, rect.width, rect.height);
-        }
     }
 
 }

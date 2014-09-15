@@ -4,23 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.input.GestureDetector;
-import com.mygdx.sample.object.Object;
-import com.mygdx.sample.object.TObject;
 
 public class Gametetr implements Screen {
     final Drop game;
-    public Object obj;
+    private Controller controller;
     
     private OrthographicCamera camera;
 
     
     public Gametetr(final Drop gam){
         this.game = gam;
-        Gdx.input.setInputProcessor(new GestureDetector(new DropGestureListener(this)));
-        obj = new TObject();
+        
+        controller = new Controller();
+        
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 480, 800);
+        
     }
 
     @Override
@@ -30,9 +29,10 @@ public class Gametetr implements Screen {
         camera.update();
        
         game.batch.setProjectionMatrix(camera.combined);
-        obj.moveDownDelta(1);// -= 200 * Gdx.graphics.getDeltaTime();
+        
+        controller.updateGame();
         game.batch.begin();
-        obj.draw(game.batch);
+        controller.draw(game.batch);
         game.batch.end();
     }
     
