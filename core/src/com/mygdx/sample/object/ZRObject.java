@@ -1,17 +1,17 @@
 package com.mygdx.sample.object;
 
-public class GLObject extends Object{
+public class ZRObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {0,2,8,6},
-        {1,5,7,3},
+        {2,8,6,0},
+        {5,7,3,1},
         {4,4,4,4},
         {7,3,1,5}
     };
 
-    public GLObject() {
-        super(ObjectType.OT_GLObject);
+    public ZRObject() {
+        super(ObjectType.OT_ZRObject);
     }
 
     @Override

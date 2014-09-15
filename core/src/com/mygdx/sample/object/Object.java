@@ -17,15 +17,20 @@ public abstract class Object {
     public float posY = 0;
     protected Array<GridPoint2> points;
     protected Array<Texture> textures;
+    private final ObjectType m_Type;
     
-    public Object() {
+    public Object(final ObjectType type) {
+        m_Type = type;
         initPoints();
         initTextures();
     }
     
+    public ObjectType getType() {
+        return m_Type;
+    }
+    
     private void initTextures() {
         int celsCount = getCellsCount();
-        System.out.println(celsCount);
         textures = new Array<Texture>();
         for(int n = 0; n < celsCount; n++) {
             Texture texture = new Texture(Gdx.files.internal("drop.png"));
@@ -193,6 +198,29 @@ public abstract class Object {
                     return OR_270;
             }
             return OR_0;
+        }
+    }
+    
+    public enum ObjectType {
+        OT_TObject(0),
+        OT_GLObject(1),
+        OT_GRObject(2),
+        OT_SQObject(3),
+        OT_ZLObject(4),
+        OT_ZRObject(5),
+        OT_STObject(6),
+        OT_MAXObject(7);
+        private final int m_Value;
+        ObjectType(int value) {
+            m_Value = value;
+        }
+        private static ObjectType[] allValues = values();
+        
+        public static ObjectType fromOrdinal(int n) {
+            return allValues[n];
+        }
+        public static int toInt(ObjectType type) {
+            return type.m_Value;
         }
     }
 

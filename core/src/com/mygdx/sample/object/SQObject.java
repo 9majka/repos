@@ -1,17 +1,17 @@
 package com.mygdx.sample.object;
 
-public class GLObject extends Object{
+public class SQObject extends Object{
     private final int celsCount = 4;
-    private final int objectSize = 3;
+    private final int objectSize = 2;
     private static int m_RotationStates[][] = {
-        {0,2,8,6},
-        {1,5,7,3},
-        {4,4,4,4},
-        {7,3,1,5}
+        {0,0,0,0},
+        {1,1,1,1},
+        {2,2,2,2},
+        {3,3,3,3}
     };
 
-    public GLObject() {
-        super(ObjectType.OT_GLObject);
+    public SQObject() {
+        super(ObjectType.OT_SQObject);
     }
 
     @Override

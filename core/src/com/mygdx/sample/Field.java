@@ -8,7 +8,7 @@ public class Field {
     Texture FieldBg;
     
     public Field() {
-        FieldBg = new Texture(Gdx.files.internal("field_bg.png"));
+        FieldBg = new Texture(Gdx.files.internal("field_bg.jpg"));
     }
     
     public void draw(SpriteBatch batch) {
