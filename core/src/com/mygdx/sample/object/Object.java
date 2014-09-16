@@ -11,10 +11,12 @@ public abstract class Object {
    
     public static final int ROTATION_STATES = 4;
     
-    public int shiftX = 0;
-    public int shiftY = 0;
-    public ObjectRotation state = ObjectRotation.OR_0;
-    public float posY = 0;
+    private int shiftX = GameConfig.WIDTH / 2;
+    private int shiftY = GameConfig.HEIGHT - getObjectSize();
+    private float posY = shiftY * GameConfig.CELLSIZE;
+    private float deltaY = 0;
+    private ObjectRotation state = ObjectRotation.OR_0;
+    
     protected Array<GridPoint2> points;
     protected Array<Texture> textures;
     private final ObjectType m_Type;
@@ -24,11 +26,11 @@ public abstract class Object {
         initPoints();
         initTextures();
     }
-    
+
     public ObjectType getType() {
         return m_Type;
     }
-    
+
     private void initTextures() {
         int celsCount = getCellsCount();
         textures = new Array<Texture>();
@@ -45,10 +47,11 @@ public abstract class Object {
         points = new Array<GridPoint2>();
         int i = 0;
         int j = 0;
+        int value = 0;
         for(int n = 0; n < celsCount; n++) {
             GridPoint2 point = new GridPoint2();
             
-            int value = rotationStates[n][ObjectRotation.toInt(state)];
+            value = rotationStates[n][ObjectRotation.toInt(state)];
             i = value%objectSize;
             j = value/objectSize;
             point.x = i + shiftX;
@@ -58,7 +61,7 @@ public abstract class Object {
     }
     
     protected int[][] getRotationStates() {
-        return new int[100][100];
+        return new int[0][0];
     }
     
     public void dispose() {
@@ -83,8 +86,9 @@ public abstract class Object {
         int rotationStates[][] = getRotationStates();
         int i = 0;
         int j = 0;
+        int value = 0;
         for(GridPoint2 point: points) {
-            int value = rotationStates[number][ObjectRotation.toInt(state)];
+            value = rotationStates[number][ObjectRotation.toInt(state)];
             i = value%objectSize;
             j = value/objectSize;
             point.x = i + shiftX;
@@ -109,13 +113,12 @@ public abstract class Object {
         float x = 0;
         float y = 0;
         float cell = GameConfig.CELLSIZE;
-        int height = (int)(posY/cell);
-        float delta = posY - height*cell;
+
         int number = 0;
         for(Texture texture: textures) {
             GridPoint2 point = points.get(number);
             x = point.x * cell;
-            y = point.y * cell + delta;
+            y = point.y * cell + deltaY;
             batch.draw(texture, x, y, cell, cell);
             number++;
         }
@@ -130,10 +133,11 @@ public abstract class Object {
     private void shiftPosX() {
         int i = 0;
         int n = 0;
+        int value = 0;
         int objectSize = getObjectSize();
         int rotationStates[][] = getRotationStates();
         for(GridPoint2 point: points) {
-            int value = rotationStates[n][ObjectRotation.toInt(state)];
+            value = rotationStates[n][ObjectRotation.toInt(state)];
             i = value%objectSize;
             point.x = (i + shiftX);
             n++;
@@ -148,7 +152,7 @@ public abstract class Object {
     
     public void moveDownDelta(float delta)
     {
-        posY += delta;
+        posY -= delta;
         movePosY();
     }
     
@@ -158,6 +162,8 @@ public abstract class Object {
         int objectSize = getObjectSize();
         int rotationStates[][] = getRotationStates();
         shiftY = (int)posY/GameConfig.CELLSIZE;
+        deltaY = posY - shiftY*GameConfig.CELLSIZE;
+
         for(GridPoint2 point: points) {
             int value = rotationStates[n][ObjectRotation.toInt(state)];
             j = value/objectSize;

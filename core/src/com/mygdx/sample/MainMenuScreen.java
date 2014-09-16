@@ -29,7 +29,7 @@ public class MainMenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         
-        walkSheet = new Texture(Gdx.files.internal("ogrewalk01.png"));
+        walkSheet = new Texture(Gdx.files.internal("drop.png"));
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COL, walkSheet.getHeight()/FRAME_ROWS);
         walkFrames = new TextureRegion[FRAME_COL * FRAME_ROWS];
         

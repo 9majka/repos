@@ -14,6 +14,9 @@ public class Model {
     public Model() {
         m_Field = new boolean[GameConfig.WIDTH][GameConfig.HEIGHT];
         m_Texture = new Texture(Gdx.files.internal("drop.png"));
+        for(int i = 0;i<GameConfig.WIDTH; i++) {
+            m_Field[i][0] = true;
+        }
     }
     
     public boolean watchObject (Object obj) {
@@ -27,25 +30,21 @@ public class Model {
         }
         return false;
     }
+
+    private boolean interact(int x, int y) {
+        System.out.println(y);
+        if(m_Field[x][y]) {
+            return true;
+        }
+        return false;
+    }
     
     private void receiveObject(Array<GridPoint2> points) {
         for(GridPoint2 point : points) {
             if(point.x< GameConfig.WIDTH && point.y < GameConfig.HEIGHT) {
-                m_Field[point.x][point.y] = true;
+                m_Field[point.x][point.y + 1] = true;
             }
         }
-    }
-    
-    private boolean interact(int x, int y) {
-        y++;
-        if(x < GameConfig.WIDTH && y < GameConfig.HEIGHT && m_Field[x][y] == true) {
-            return true;
-        }
-        if(y == GameConfig.HEIGHT) {
-            return true;
-        }
-        
-        return false;
     }
 
     public void draw(SpriteBatch batch) {

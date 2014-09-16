@@ -6,20 +6,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class Gametetr implements Screen {
-    final Drop game;
+    private final Drop game;
     private Controller controller;
-    
     private OrthographicCamera camera;
 
-    
     public Gametetr(final Drop gam){
         this.game = gam;
         
         controller = new Controller();
-        
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 480, 800);
-        
     }
 
     @Override

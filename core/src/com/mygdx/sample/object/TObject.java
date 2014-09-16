@@ -4,9 +4,9 @@ public class TObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {0,2,8,6},
-        {1,5,7,3},
-        {2,8,6,0},
+        {6,8,2,0},
+        {7,5,1,3},
+        {8,2,0,6},
         {4,4,4,4}
     };
 

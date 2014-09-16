@@ -19,6 +19,7 @@ public class Controller extends ControllerListener {
         m_Field = new Field();
         m_ObjectFactory = new ObjectFactory();
         m_ActiveObj = m_ObjectFactory.getNextObject();
+        Gdx.graphics.setContinuousRendering(false);
     }
     
     @Override
@@ -32,7 +33,7 @@ public class Controller extends ControllerListener {
     }
     
     public void updateGame() {
-        m_ActiveObj.moveDownDelta(2);
+        m_ActiveObj.moveDownDelta(5);
         if(m_Model.watchObject(m_ActiveObj)) {
             m_ActiveObj.dispose();
             m_ActiveObj = m_ObjectFactory.getNextObject();
