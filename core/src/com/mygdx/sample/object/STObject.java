@@ -5,10 +5,10 @@ public class STObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 4;
     private static int m_RotationStates[][] = {
-        {1,7,14,8},
-        {5,6,10,9},
-        {9,5,6,10},
-        {13,4,2,11}
+        {13,11,2,4},
+        {9,10,6,5},
+        {5,9,10,6},
+        {1,8,14,7}
     };
 
     public STObject() {

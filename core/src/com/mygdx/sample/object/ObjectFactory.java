@@ -25,6 +25,7 @@ public class ObjectFactory {
     }
     
     private Object createObject(ObjectType type) {
+        //type = ObjectType.OT_STObject;
         switch (type) {
             case OT_TObject:
                 return new TObject();

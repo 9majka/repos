@@ -3,6 +3,8 @@ package com.mygdx.sample;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.sample.object.Object;
 import com.mygdx.sample.object.ObjectFactory;
 
@@ -19,17 +21,36 @@ public class Controller extends ControllerListener {
         m_Field = new Field();
         m_ObjectFactory = new ObjectFactory();
         m_ActiveObj = m_ObjectFactory.getNextObject();
-        Gdx.graphics.setContinuousRendering(false);
+        //Gdx.graphics.setContinuousRendering(false);
     }
     
     @Override
     public void onShiftTo(int step) {
+        Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+
+        for(GridPoint2 point : points) {
+            if(point.x + step < 0) {
+                return;
+            }
+            if(point.x + step >= GameConfig.WIDTH) {
+                return;
+            }
+        }
         m_ActiveObj.shiftTo(step);
     }
     
     @Override
     public void onTap() {
         m_ActiveObj.rotate();
+        int shiftX = m_ActiveObj.getShiftX();
+        int offset = 0;
+        Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+        for(GridPoint2 point : points) {
+
+        }
+        if(offset != 0) {
+            m_ActiveObj.shiftTo(shiftX - offset);
+        }
     }
     
     public void updateGame() {

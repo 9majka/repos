@@ -21,10 +21,11 @@ public class Model {
     
     public boolean watchObject (Object obj) {
         Array<GridPoint2> points = obj.getAbsolutePoints();
-        
+        int shiftX = obj.getShiftX();
+        int shiftY = obj.getShiftY();
         for(GridPoint2 point : points) {
-            if(interact(point.x, point.y)) {
-                receiveObject(points);
+            if(interact(point.x + shiftX, point.y + shiftY)) {
+                receiveObject(points, shiftX, shiftY);
                 return true;
             }
         }
@@ -32,17 +33,16 @@ public class Model {
     }
 
     private boolean interact(int x, int y) {
-        System.out.println(y);
         if(m_Field[x][y]) {
             return true;
         }
         return false;
     }
     
-    private void receiveObject(Array<GridPoint2> points) {
+    private void receiveObject(Array<GridPoint2> points, int shiftX, int shiftY) {
         for(GridPoint2 point : points) {
             if(point.x< GameConfig.WIDTH && point.y < GameConfig.HEIGHT) {
-                m_Field[point.x][point.y + 1] = true;
+                m_Field[point.x + shiftX][point.y + 1 + shiftY] = true;
             }
         }
     }
