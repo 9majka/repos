@@ -1,5 +1,8 @@
 package com.mygdx.sample;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,7 +16,7 @@ public class Model {
     
     public Model() {
         m_Field = new boolean[GameConfig.WIDTH][GameConfig.HEIGHT];
-        m_Texture = new Texture(Gdx.files.internal("drop.png"));
+        m_Texture = new Texture(Gdx.files.internal("drop_gray.png"));
         for(int i = 0;i<GameConfig.WIDTH; i++) {
             m_Field[i][0] = true;
         }
@@ -26,6 +29,7 @@ public class Model {
         for(GridPoint2 point : points) {
             if(interact(point.x + shiftX, point.y + shiftY)) {
                 receiveObject(points, shiftX, shiftY);
+                updateModel();
                 return true;
             }
         }
@@ -44,6 +48,43 @@ public class Model {
             if(point.x< GameConfig.WIDTH && point.y < GameConfig.HEIGHT) {
                 m_Field[point.x + shiftX][point.y + 1 + shiftY] = true;
             }
+        }
+    }
+    
+    private void updateModel() {
+        Set<Integer> selectedRows = new HashSet<Integer>();
+        for(int j = 1; j < GameConfig.HEIGHT; j++) {
+            int count = 0;
+            for(int i = 0; i < GameConfig.WIDTH; i++) {
+                if(m_Field[i][j] == true) {
+                    count++;
+                } else {
+                    break;
+                }
+            }
+            if(count == GameConfig.WIDTH) {
+                selectedRows.add(j);
+            }
+        }
+        
+        if(!selectedRows.isEmpty()) {
+            boolean field[][] = new boolean [GameConfig.WIDTH][GameConfig.HEIGHT];
+            int next_j = 0;
+            for(int j = 0; j < GameConfig.HEIGHT; j++) {
+                while(selectedRows.contains(next_j)) {
+                    next_j++;
+                }
+                for(int i = 0; i < GameConfig.WIDTH; i++) {
+                    if(next_j > GameConfig.WIDTH) {
+                        field[i][j] = false;
+                    }
+                    else {
+                        field[i][j] = m_Field[i][next_j];
+                    }
+                }
+                next_j++;
+            }
+            m_Field = field;
         }
     }
 

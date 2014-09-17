@@ -1,5 +1,6 @@
 package com.mygdx.sample.object;
 
+
 public class GRObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 3;
@@ -11,7 +12,7 @@ public class GRObject extends Object{
     };
 
     public GRObject() {
-        super(ObjectType.OT_GRObject);
+        super(ObjectType.OT_GRObject, "drop_bir.png");
     }
 
     @Override

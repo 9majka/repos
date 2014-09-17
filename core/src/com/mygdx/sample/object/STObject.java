@@ -1,6 +1,5 @@
 package com.mygdx.sample.object;
 
-
 public class STObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 4;
@@ -12,7 +11,7 @@ public class STObject extends Object{
     };
 
     public STObject() {
-        super(ObjectType.OT_STObject);
+        super(ObjectType.OT_STObject, "drop_yellow.png");
     }
 
     @Override

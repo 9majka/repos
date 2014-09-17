@@ -1,5 +1,7 @@
 package com.mygdx.sample.object;
 
+import com.badlogic.gdx.Gdx;
+
 
 public class ZLObject extends Object{
     private final int celsCount = 4;
@@ -12,7 +14,7 @@ public class ZLObject extends Object{
     };
 
     public ZLObject() {
-        super(ObjectType.OT_ZLObject);
+        super(ObjectType.OT_ZLObject, "drop.png");
     }
 
     @Override

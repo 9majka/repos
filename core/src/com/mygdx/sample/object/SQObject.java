@@ -11,7 +11,7 @@ public class SQObject extends Object{
     };
 
     public SQObject() {
-        super(ObjectType.OT_SQObject);
+        super(ObjectType.OT_SQObject, "drop_green.png");
     }
 
     @Override

@@ -4,8 +4,9 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 
 public class DropGestureListener implements GestureListener{
-    final ControllerListener m_Listener;;
-    int rot = 0;
+    private final ControllerListener m_Listener;;
+    private boolean m_Pan = false;
+    private int X = 0;
     public DropGestureListener(final ControllerListener listener) {
         m_Listener = listener;
         
@@ -34,12 +35,22 @@ public class DropGestureListener implements GestureListener{
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
         int step = (int)x/GameConfig.CELLSIZE;
-        m_Listener.onShiftTo(step);
+        if(m_Pan == false) {
+            m_Pan = true;
+            X = step;
+        }
+        if(X != step) {
+            m_Listener.onShiftToDelta(step - X);
+            X = step;
+        }
+        
         return false;
     }
 
     @Override
     public boolean panStop(float x, float y, int pointer, int button) {
+        m_Pan = false;
+        System.out.println("Stop");
         return false;
     }
 

@@ -1,5 +1,6 @@
 package com.mygdx.sample.object;
 
+
 public class ZRObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 3;
@@ -11,7 +12,7 @@ public class ZRObject extends Object{
     };
 
     public ZRObject() {
-        super(ObjectType.OT_ZRObject);
+        super(ObjectType.OT_ZRObject, "drop_pink.png");
     }
 
     @Override

@@ -14,6 +14,7 @@ public class Controller extends ControllerListener {
     private Model m_Model;
     private Field m_Field;
     private ObjectFactory m_ObjectFactory;
+    private int m_Speed = 3;
     
     public Controller() {
         Gdx.input.setInputProcessor(new GestureDetector(new DropGestureListener(this)));
@@ -22,6 +23,22 @@ public class Controller extends ControllerListener {
         m_ObjectFactory = new ObjectFactory();
         m_ActiveObj = m_ObjectFactory.getNextObject();
         //Gdx.graphics.setContinuousRendering(false);
+    }
+    
+    @Override
+    public void onShiftToDelta(int delta) {
+        int shiftX = m_ActiveObj.getShiftX() + delta;
+        Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+
+        for(GridPoint2 point : points) {
+            if(point.x + shiftX < 0) {
+                return;
+            }
+            if(point.x + shiftX >= GameConfig.WIDTH) {
+                return;
+            }
+        }
+        m_ActiveObj.shiftTo(shiftX);
     }
     
     @Override
@@ -45,8 +62,22 @@ public class Controller extends ControllerListener {
         int shiftX = m_ActiveObj.getShiftX();
         int offset = 0;
         Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+        int min = 0;
+        int max = 0;
+        int curPoint = 0;
         for(GridPoint2 point : points) {
-
+            curPoint = point.x + shiftX;
+            if(curPoint > max) {
+                max = curPoint;
+            }
+            if(curPoint < min) {
+                min = curPoint;
+            }
+        }
+        if(min < 0) {
+            offset = min;
+        } else if(max >= GameConfig.WIDTH) {
+            offset = max - GameConfig.WIDTH + 1;
         }
         if(offset != 0) {
             m_ActiveObj.shiftTo(shiftX - offset);
@@ -54,7 +85,7 @@ public class Controller extends ControllerListener {
     }
     
     public void updateGame() {
-        m_ActiveObj.moveDownDelta(5);
+        m_ActiveObj.moveDownDelta(m_Speed);
         if(m_Model.watchObject(m_ActiveObj)) {
             m_ActiveObj.dispose();
             m_ActiveObj = m_ObjectFactory.getNextObject();

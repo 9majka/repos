@@ -11,6 +11,10 @@ public abstract class ControllerListener {
         
     }
     
+    public void onShiftToDelta(int delta) {
+        
+    }
+    
     public void onTap() {
         
     }

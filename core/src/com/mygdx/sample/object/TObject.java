@@ -1,5 +1,6 @@
 package com.mygdx.sample.object;
 
+
 public class TObject extends Object{
     private final int celsCount = 4;
     private final int objectSize = 3;
@@ -11,7 +12,7 @@ public class TObject extends Object{
     };
 
     public TObject() {
-        super(ObjectType.OT_TObject);
+        super(ObjectType.OT_TObject, "drop_red.png");
     }
 
     @Override

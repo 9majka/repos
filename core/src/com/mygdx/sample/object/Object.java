@@ -1,6 +1,8 @@
 package com.mygdx.sample.object;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
@@ -20,13 +22,19 @@ public abstract class Object {
     protected Array<GridPoint2> m_Points;
     protected Array<Texture> textures;
     private final ObjectType m_Type;
+    protected FileHandle m_TexureFile;
     
-    public Object(final ObjectType type) {
+    public Object(final ObjectType type, String file) {
         m_Type = type;
+        m_TexureFile = Gdx.files.internal(file);
         initPoints();
         initTextures();
     }
-
+    
+    public FileHandle getFile() {
+        return m_TexureFile;
+    }
+    
     public ObjectType getType() {
         return m_Type;
     }
@@ -35,7 +43,7 @@ public abstract class Object {
         int celsCount = getCellsCount();
         textures = new Array<Texture>();
         for(int n = 0; n < celsCount; n++) {
-            Texture texture = new Texture(Gdx.files.internal("drop.png"));
+            Texture texture = new Texture(m_TexureFile);
             textures.add(texture);
         }
     }
@@ -127,7 +135,10 @@ public abstract class Object {
             GridPoint2 point = m_Points.get(number);
             x = (point.x + shiftX) * cell;
             y = (point.y + shiftY) * cell + deltaY;
+            Color color = batch.getColor();
+            batch.setColor ( 1f, 1f, 1f, 1f);
             batch.draw(texture, x, y, cell, cell);
+            batch.setColor (color);
             number++;
         }
     }

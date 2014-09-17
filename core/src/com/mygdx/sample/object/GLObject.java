@@ -11,7 +11,7 @@ public class GLObject extends Object{
     };
 
     public GLObject() {
-        super(ObjectType.OT_GLObject);
+        super(ObjectType.OT_GLObject, "drop_blue.png");
     }
 
     @Override
