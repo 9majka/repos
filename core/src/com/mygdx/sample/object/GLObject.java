@@ -10,8 +10,8 @@ public class GLObject extends Object{
         {1,3,7,5}
     };
 
-    public GLObject() {
-        super(ObjectType.OT_GLObject, "drop_blue.png");
+    public GLObject(final int blocSize) {
+        super(ObjectType.OT_GLObject, "drop_blue.png", blocSize);
     }
 
     @Override

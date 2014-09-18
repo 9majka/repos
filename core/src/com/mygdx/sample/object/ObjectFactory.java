@@ -1,13 +1,16 @@
 package com.mygdx.sample.object;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.mygdx.sample.GameConfig;
 import com.mygdx.sample.object.Object.ObjectType;
 
 public class ObjectFactory {
     private ObjectType m_CurrentType;
     private ObjectType m_NextType;
+    private final GameConfig m_Config;
     
-    public ObjectFactory() {
+    public ObjectFactory(final GameConfig config) {
+        m_Config = config;
         init();
     }
     
@@ -26,23 +29,24 @@ public class ObjectFactory {
     
     private Object createObject(ObjectType type) {
         //type = ObjectType.OT_STObject;
+        int blockSize = m_Config.getBlockUnitSize();
         switch (type) {
             case OT_TObject:
-                return new TObject();
+                return new TObject(blockSize);
             case OT_GLObject:
-                return new GLObject();
+                return new GLObject(blockSize);
             case OT_GRObject:
-                return new GRObject();
+                return new GRObject(blockSize);
             case OT_SQObject:
-                return new SQObject();
+                return new SQObject(blockSize);
             case OT_ZLObject:
-                return new ZLObject();
+                return new ZLObject(blockSize);
             case OT_ZRObject:
-                return new ZRObject();
+                return new ZRObject(blockSize);
             case OT_STObject:
-                return new STObject();
+                return new STObject(blockSize);
                 default:
-                return new TObject();
+                return new TObject(blockSize);
         }
     } 
     

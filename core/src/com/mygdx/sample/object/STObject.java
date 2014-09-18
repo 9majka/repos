@@ -10,8 +10,8 @@ public class STObject extends Object{
         {1,8,14,7}
     };
 
-    public STObject() {
-        super(ObjectType.OT_STObject, "drop_yellow.png");
+    public STObject(final int blocSize) {
+        super(ObjectType.OT_STObject, "drop_yellow.png", blocSize);
     }
 
     @Override

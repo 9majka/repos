@@ -10,8 +10,8 @@ public class SQObject extends Object{
         {3,3,3,3}
     };
 
-    public SQObject() {
-        super(ObjectType.OT_SQObject, "drop_green.png");
+    public SQObject(final int blocSize) {
+        super(ObjectType.OT_SQObject, "drop_green.png", blocSize);
     }
 
     @Override

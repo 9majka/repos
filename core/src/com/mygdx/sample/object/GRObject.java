@@ -11,8 +11,8 @@ public class GRObject extends Object{
         {7,3,1,5}
     };
 
-    public GRObject() {
-        super(ObjectType.OT_GRObject, "drop_bir.png");
+    public GRObject(final int blocSize) {
+        super(ObjectType.OT_GRObject, "drop_bir.png", blocSize);
     }
 
     @Override

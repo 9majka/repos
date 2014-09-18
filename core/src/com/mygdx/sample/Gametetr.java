@@ -10,10 +10,9 @@ public class Gametetr implements Screen {
     private Controller controller;
     private OrthographicCamera camera;
 
-    public Gametetr(final Drop gam){
+    public Gametetr(final Drop gam, final GameConfig config){
         this.game = gam;
-        
-        controller = new Controller();
+        controller = new Controller(config);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 480, 800);
     }

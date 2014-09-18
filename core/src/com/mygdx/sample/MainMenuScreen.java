@@ -13,6 +13,7 @@ public class MainMenuScreen implements Screen {
     private static final int FRAME_COL = 8;
     private static final int FRAME_ROWS = 8; 
     final Drop game;
+    private GameConfig m_Config;
 
     OrthographicCamera camera;
     
@@ -25,7 +26,7 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(final Drop gam) {
         game = gam;
-
+        m_Config = new GameConfig();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         
@@ -63,13 +64,15 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            game.setScreen(new Gametetr(game));
+            
+            game.setScreen(new Gametetr(game, m_Config));
             dispose();
         }
     }
 
     @Override
     public void resize(int width, int height) {
+        m_Config.setScreeSize(width, height);
     }
 
     @Override

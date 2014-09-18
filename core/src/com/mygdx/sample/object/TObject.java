@@ -11,8 +11,8 @@ public class TObject extends Object{
         {4,4,4,4}
     };
 
-    public TObject() {
-        super(ObjectType.OT_TObject, "drop_red.png");
+    public TObject(final int blocSize) {
+        super(ObjectType.OT_TObject, "drop_red.png", blocSize);
     }
 
     @Override

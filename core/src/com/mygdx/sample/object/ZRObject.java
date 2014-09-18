@@ -11,8 +11,8 @@ public class ZRObject extends Object{
         {7,3,1,5}
     };
 
-    public ZRObject() {
-        super(ObjectType.OT_ZRObject, "drop_pink.png");
+    public ZRObject(final int blocSize) {
+        super(ObjectType.OT_ZRObject, "drop_pink.png", blocSize);
     }
 
     @Override

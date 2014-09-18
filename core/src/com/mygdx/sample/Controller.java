@@ -8,25 +8,32 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.sample.object.Object;
 import com.mygdx.sample.object.ObjectFactory;
 
-public class Controller extends ControllerListener {
+public class Controller implements ControllerListener {
     
     private Object m_ActiveObj;
     private Model m_Model;
     private Field m_Field;
     private ObjectFactory m_ObjectFactory;
-    private int m_Speed = 3;
+    private int m_Speed = 2;
+    private boolean mAcceleration = false;
+    private final GameConfig m_Config;
     
-    public Controller() {
-        Gdx.input.setInputProcessor(new GestureDetector(new DropGestureListener(this)));
-        m_Model = new Model();
-        m_Field = new Field();
-        m_ObjectFactory = new ObjectFactory();
+    public Controller(final GameConfig config) {
+        m_Config = config;
+        Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
+        m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
+        m_Field = new Field(config.getFieldUnitWidth(), config.getFieldUnitHeight());
+        m_ObjectFactory = new ObjectFactory(config);
+        
         m_ActiveObj = m_ObjectFactory.getNextObject();
-        //Gdx.graphics.setContinuousRendering(false);
+        int shiftX = config.getFieldBlockWidth()/2;
+        int shiftY = config.getFieldBlockHeight() - m_ActiveObj.getObjectSize();
+        m_ActiveObj.shiftTo(shiftX, shiftY);
+        //dx.graphics.setContinuousRendering(false);
     }
     
     @Override
-    public void onShiftToDelta(int delta) {
+    public void onShiftToDeltaX(int delta) {
         int shiftX = m_ActiveObj.getShiftX() + delta;
         Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
 
@@ -34,30 +41,19 @@ public class Controller extends ControllerListener {
             if(point.x + shiftX < 0) {
                 return;
             }
-            if(point.x + shiftX >= GameConfig.WIDTH) {
+            if(point.x + shiftX >= m_Config.getFieldBlockWidth()) {
                 return;
             }
         }
-        m_ActiveObj.shiftTo(shiftX);
+        m_ActiveObj.shiftXTo(shiftX);
     }
     
-    @Override
-    public void onShiftTo(int step) {
-        Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+    public void onAccelarate() {
+        mAcceleration = true;
+    }
 
-        for(GridPoint2 point : points) {
-            if(point.x + step < 0) {
-                return;
-            }
-            if(point.x + step >= GameConfig.WIDTH) {
-                return;
-            }
-        }
-        m_ActiveObj.shiftTo(step);
-    }
-    
     @Override
-    public void onTap() {
+    public void onRotate() {
         m_ActiveObj.rotate();
         int shiftX = m_ActiveObj.getShiftX();
         int offset = 0;
@@ -76,30 +72,38 @@ public class Controller extends ControllerListener {
         }
         if(min < 0) {
             offset = min;
-        } else if(max >= GameConfig.WIDTH) {
-            offset = max - GameConfig.WIDTH + 1;
+        } else if(max >= m_Config.getFieldBlockWidth()) {
+            offset = max - m_Config.getFieldBlockWidth() + 1;
         }
         if(offset != 0) {
-            m_ActiveObj.shiftTo(shiftX - offset);
+            m_ActiveObj.shiftXTo(shiftX - offset);
         }
     }
     
     public void updateGame() {
-        m_ActiveObj.moveDownDelta(m_Speed);
+        int speed = m_Speed;
+        if(mAcceleration) {
+            speed = m_Config.getAccelerationSpeed();
+        }
+        m_ActiveObj.moveDownDelta(speed);
         if(m_Model.watchObject(m_ActiveObj)) {
             m_ActiveObj.dispose();
+            mAcceleration = false;
             m_ActiveObj = m_ObjectFactory.getNextObject();
+            
+            int shiftX = m_Config.getFieldBlockWidth()/2;
+            int shiftY = m_Config.getFieldBlockHeight() - m_ActiveObj.getObjectSize();
+            m_ActiveObj.shiftTo(shiftX, shiftY);
         }
     }
     
     public Object getActiveObject() {
-        
         return m_ActiveObj;
     }
     
     public void draw(SpriteBatch batch) {
         m_Field.draw(batch);
         m_ActiveObj.draw(batch);
-        m_Model.draw(batch);
+        m_Model.draw(batch, m_Config.getBlockUnitSize());
     }
 }
