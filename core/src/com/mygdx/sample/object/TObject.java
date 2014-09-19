@@ -1,7 +1,7 @@
 package com.mygdx.sample.object;
 
 
-public class TObject extends Object{
+public class TObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {

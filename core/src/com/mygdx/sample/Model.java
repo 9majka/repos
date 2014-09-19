@@ -5,10 +5,9 @@ import java.util.Set;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.sample.object.Object;
+import com.mygdx.sample.object.GameObject;
 
 public class Model {
     private final int m_BlockWidth;
@@ -16,12 +15,12 @@ public class Model {
     private boolean m_Field[][];
     private ModelListener mListener = null;
 
-    Texture m_Texture;
+    private Texture m_Texture;
     
     public Model(final int blockWidth, final int blocHeight) {
         m_BlockWidth = blockWidth;
         m_BlockHeight = blocHeight;
-        m_Field = new boolean[m_BlockWidth][m_BlockHeight];
+        m_Field = new boolean[m_BlockWidth][m_BlockHeight + 1];
         m_Texture = new Texture(Gdx.files.internal("drop_gray.png"));
         for(int i = 0; i < m_BlockWidth; i++) {
             m_Field[i][0] = true;
@@ -31,8 +30,51 @@ public class Model {
     public void setListener(ModelListener listener) {
         mListener = listener;
     }
+
+    public final boolean[][] getField() {
+        return m_Field;
+    }
     
-    public boolean watchObject (Object obj) {
+    public Texture getTexture() {
+        return m_Texture;
+    }
+    
+    private boolean valid(int i, int j) {
+        if( i >= m_BlockWidth ||
+            i < 0             ||
+            j < 0             ||
+            j > m_BlockHeight) {
+            return false;
+        }
+        return true;
+    }
+    
+    public boolean isShiftPossible(Array<GridPoint2> points, int shiftX, int shiftY) {
+        for(GridPoint2 point : points) {
+            if(m_Field[point.x + shiftX][point.y + shiftY] == true) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public boolean isRotatePossible(Array<GridPoint2> points, int shiftX, int shiftY) {
+        int i = 0;
+        int j = 0;
+        for(GridPoint2 point : points) {
+            i = point.x + shiftX;
+            j = point.y + shiftY;
+            System.out.println("i = " + i);
+            System.out.println("j = " + j);
+
+            if(valid(i, j) && m_Field[i][j] == true) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean watchObject (GameObject obj) {
         Array<GridPoint2> points = obj.getAbsolutePoints();
         int shiftX = obj.getShiftX();
         int shiftY = obj.getShiftY();
@@ -107,17 +149,6 @@ public class Model {
                 next_j++;
             }
             m_Field = field;
-        }
-    }
-
-    public void draw(SpriteBatch batch, int blockSize) {
-        for(int j = 0; j < m_BlockHeight; j++) {
-            for(int i = 0; i < m_BlockWidth; i++) {
-                
-                if(m_Field[i][j] == true) {
-                    batch.draw(m_Texture, i*blockSize, j*blockSize, blockSize, blockSize);
-                }
-            }
         }
     }
 }

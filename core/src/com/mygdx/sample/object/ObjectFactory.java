@@ -2,7 +2,7 @@ package com.mygdx.sample.object;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.mygdx.sample.GameConfig;
-import com.mygdx.sample.object.Object.ObjectType;
+import com.mygdx.sample.object.GameObject.ObjectType;
 
 public class ObjectFactory {
     private ObjectType m_CurrentType;
@@ -27,7 +27,7 @@ public class ObjectFactory {
         m_NextType = ObjectType.fromOrdinal(rand);
     }
     
-    private Object createObject(ObjectType type) {
+    private GameObject createObject(ObjectType type) {
         //type = ObjectType.OT_STObject;
         int blockSize = m_Config.getBlockUnitSize();
         switch (type) {
@@ -50,9 +50,9 @@ public class ObjectFactory {
         }
     } 
     
-    public Object getNextObject() {
+    public GameObject getNextObject() {
         generateNext();
-        Object object = createObject(m_CurrentType);
+        GameObject object = createObject(m_CurrentType);
         return object;
     }
 }

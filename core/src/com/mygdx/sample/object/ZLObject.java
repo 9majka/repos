@@ -1,13 +1,13 @@
 package com.mygdx.sample.object;
 
-public class ZLObject extends Object{
+public class ZLObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {0,2,8,6},
-        {3,1,5,7},
-        {4,4,4,4},
-        {7,3,1,5}
+        {7,8,7,8},
+        {4,7,4,7},
+        {5,4,5,4},
+        {2,3,2,3}
     };
 
     public ZLObject(final int blocSize) {

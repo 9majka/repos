@@ -1,14 +1,14 @@
 package com.mygdx.sample.object;
 
 
-public class GRObject extends Object{
+public class GRObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {2,8,6,0},
-        {1,5,7,3},
+        {7,5,1,3},
+        {8,2,0,6},
         {4,4,4,4},
-        {7,3,1,5}
+        {1,3,7,5}
     };
 
     public GRObject(final int blocSize) {

@@ -3,27 +3,27 @@ package com.mygdx.sample.object;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
 
-public abstract class Object {
+public abstract class GameObject {
    
     public static final int ROTATION_STATES = 4;
     
     private int m_ShiftX = 0;//GameConfig.WIDTH / 2;
     private int m_ShiftY = 0;//GameConfig.HEIGHT - getObjectSize();
     private float m_UnitY = 0;
-    private float m_DeltaY = 0;
     private final int m_BlockUnitSize;
     private ObjectRotation state = ObjectRotation.OR_0;
     
-    protected Array<GridPoint2> m_Points;
-    protected Array<Texture> textures;
+    private Array<GridPoint2> m_Points;
+    private Array<GridPoint2> mRotatePoints;
+
     private final ObjectType m_Type;
-    protected FileHandle m_TexureFile;
+    private FileHandle m_TexureFile;
+    private Texture m_Texture;
     
-    public Object(final ObjectType type, String file, final int blockSize) {
+    public GameObject(final ObjectType type, String file, final int blockSize) {
         m_Type = type;
         m_BlockUnitSize = blockSize;
         m_TexureFile = Gdx.files.internal(file);
@@ -36,17 +36,16 @@ public abstract class Object {
         return m_TexureFile;
     }
     
+    public Texture getTexture() {
+        return m_Texture;
+    }
+    
     public ObjectType getType() {
         return m_Type;
     }
 
     private void initTextures() {
-        int celsCount = getCellsCount();
-        textures = new Array<Texture>();
-        for(int n = 0; n < celsCount; n++) {
-            Texture texture = new Texture(m_TexureFile);
-            textures.add(texture);
-        }
+        m_Texture = new Texture(m_TexureFile);
     }
     
     private void initPoints() {
@@ -54,6 +53,7 @@ public abstract class Object {
         int objectSize = getObjectSize();
         int rotationStates[][] = getRotationStates();
         m_Points = new Array<GridPoint2>();
+        mRotatePoints = new Array<GridPoint2>();
         int i = 0;
         int j = 0;
         int value = 0;
@@ -66,27 +66,38 @@ public abstract class Object {
             point.x = i;
             point.y = j;
             m_Points.add(point);
+            mRotatePoints.add(new GridPoint2());
         }
-    }
-
-    protected int[][] getRotationStates() {
-        return new int[0][0];
     }
     
     public void dispose() {
-
     }
     
-    public int getObjectSize() {
-        return 0;
-    }
-    
-    public int getCellsCount() {
-        return 0;
-    }
+    abstract protected int[][] getRotationStates();
+    abstract public int getObjectSize();
+    abstract public int getCellsCount();
     
     public Array<GridPoint2> getAbsolutePoints() {
         return m_Points;
+    }
+    
+    public Array<GridPoint2> getNextRotationPoints() {
+        int number = 0;
+        int objectSize = getObjectSize();
+        int rotationStates[][] = getRotationStates();
+        int i = 0;
+        int j = 0;
+        int value = 0;
+        for(GridPoint2 point: mRotatePoints) {
+            value = rotationStates[number][ObjectRotation.nextRotInt(state)];
+            i = value%objectSize;
+            j = value/objectSize;
+            point.x = i;
+            point.y = j;
+            number++;
+        }
+        
+        return mRotatePoints;
     }
     
     private void rotateRects() {
@@ -112,32 +123,20 @@ public abstract class Object {
     }
     
     public void rotate() {
-        int x = ObjectRotation.toInt(state);
-        x++;
-        state = ObjectRotation.toRot(x);
+        state = ObjectRotation.nextRot(state);
         rotateRects();
     }
-    
-    public void draw(SpriteBatch batch) {
-        float x = 0;
-        float y = 0;
 
-        int number = 0;
-        for(Texture texture: textures) {
-            GridPoint2 point = m_Points.get(number);
-            x = (point.x + m_ShiftX) * m_BlockUnitSize;
-            y = (point.y + m_ShiftY) * m_BlockUnitSize + m_DeltaY;
-            batch.draw(texture, x, y, m_BlockUnitSize, m_BlockUnitSize);
-            number++;
-        }
-    }
-    
     public int getShiftX() {
         return m_ShiftX;
     }
     
     public int getShiftY() {
         return m_ShiftY;
+    }
+    
+    public float getPosY() {
+        return m_UnitY;
     }
     
     public void shiftTo(int stepX, int stepY)
@@ -169,56 +168,56 @@ public abstract class Object {
     }
     
     private void movePosY() {
-//        int j = 0;
-//        int n = 0;
-//        int objectSize = getObjectSize();
-//        int rotationStates[][] = getRotationStates();
         m_ShiftY = (int)m_UnitY/m_BlockUnitSize;
         if(m_UnitY < 0) {
             m_ShiftY = m_ShiftY - 1;
         }
-        m_DeltaY = m_UnitY - m_ShiftY * m_BlockUnitSize;
-
-//        for(GridPoint2 point: m_Points) {
-//            int value = rotationStates[n][ObjectRotation.toInt(state)];
-//            j = value/objectSize;
-//            point.y = j;
-//            n++;
-//        }
     }
     
     public enum ObjectRotation{
-        OR_0,
-        OR_90,
-        OR_180,
-        OR_270;
-        
-        public static int toInt(ObjectRotation x) {
-            switch(x) {
-                case OR_0:
-                    return 0;
-                case OR_90:
-                    return 1;
-                case OR_180:
-                    return 2;
-                case OR_270:
-                    return 3;
-            }
-            return -1;
+        OR_0(0),
+        OR_90(1),
+        OR_180(2),
+        OR_270(3);
+        private final int m_Value;
+        ObjectRotation(int value) {
+            m_Value = value;
         }
         
-        public static ObjectRotation toRot(int x) {
-            switch(x) {
-                case 0:
-                    return OR_0;
-                case 1:
-                    return OR_90;
-                case 2:
-                    return OR_180;
-                case 3:
-                    return OR_270;
+        private static ObjectRotation[] allValues = values();
+        
+        public static ObjectRotation toRot(int n) {
+            return allValues[n];
+        }
+        
+        public static ObjectRotation nextRot(ObjectRotation currentRot) {
+            int current = toInt(currentRot);
+            current++;
+            if(current > 3) {
+                current = 0;
             }
-            return OR_0;
+            return allValues[current];
+        }
+        
+        public static int nextRotInt(ObjectRotation currentRot) {
+            int current = toInt(currentRot);
+            current++;
+            if(current > 3) {
+                current = 0;
+            }
+            return current;
+        }
+        
+        public static ObjectRotation nextRot(int current) {
+            current++;
+            if(current > 3) {
+                current = 0;
+            }
+            return allValues[current];
+        }
+        
+        public static int toInt(ObjectRotation type) {
+            return type.m_Value;
         }
     }
     

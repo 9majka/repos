@@ -1,6 +1,6 @@
 package com.mygdx.sample.object;
 
-public class SQObject extends Object{
+public class SQObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 2;
     private static int m_RotationStates[][] = {

@@ -1,9 +1,8 @@
 package com.mygdx.sample;
 
-import com.badlogic.gdx.input.GestureDetector.GestureListener;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
 
-public class EventController implements GestureListener{
+public class EventController extends GestureAdapter{
     private final ControllerListener mListener;
     private final GameConfig mConfig;
     private boolean mPanX = false;
@@ -15,11 +14,6 @@ public class EventController implements GestureListener{
         mListener = listener;
         mConfig = config;
     }
-    
-    @Override
-    public boolean touchDown(float x, float y, int pointer, int button) {
-        return false;
-    }
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
@@ -27,21 +21,6 @@ public class EventController implements GestureListener{
         return false;
     }
 
-    @Override
-    public boolean longPress(float x, float y) {
-        return false;
-    }
-
-    @Override
-    public boolean fling(float velocityX, float velocityY, int button) {
-//        System.out.print("X = ");
-//        System.out.println(velocityX);
-//        System.out.print("Y = ");
-//        System.out.println(velocityY);
-        System.out.print("Flying");
-        return false;
-    }
-    
     private void proccessAcceleration(float y) {
         int stepy = (int)y / mConfig.getBlockUnitSize();
         if(mPanY == false) {
@@ -66,12 +45,26 @@ public class EventController implements GestureListener{
             mStartPanX = stepx;
         }
     }
+    
+    private float normalizeX(float absoluteX) {
+        float ratio = mConfig.getRatioWidth();
+        return absoluteX/ratio;
+    }
+    
+    private float normalizeY(float absoluteY) {
+        float ratio = mConfig.getRatioHeight();
+        return absoluteY/ratio;
+    }
 
     @Override
     public boolean pan(float x, float y, float deltaX, float deltaY) {
-        System.out.print("Pan");
-        proccessAcceleration(y);
-        proccessShift(x);
+        if(Math.abs(deltaX) > Math.abs(deltaY)) {
+            proccessShift(normalizeX(x));
+        }
+        else {
+            proccessAcceleration(normalizeY(y));
+        }
+        
         return false;
     }
 
@@ -80,15 +73,5 @@ public class EventController implements GestureListener{
         mPanX = false;
         mPanY = false;
         return false;
-    }
-
-    @Override
-    public boolean zoom (float originalDistance, float currentDistance){
-       return false;
-    }
-
-    @Override
-    public boolean pinch (Vector2 initialFirstPointer, Vector2 initialSecondPointer, Vector2 firstPointer, Vector2 secondPointer){
-       return false;
     }
 }

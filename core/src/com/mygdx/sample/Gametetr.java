@@ -9,12 +9,14 @@ public class Gametetr implements Screen {
     private final Drop game;
     private Controller controller;
     private OrthographicCamera camera;
+    private GameConfig m_Config;
 
-    public Gametetr(final Drop gam, final GameConfig config){
+    public Gametetr(final Drop gam, GameConfig config){
         this.game = gam;
+        m_Config = config;
         controller = new Controller(config);
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 480, 800);
+        camera.setToOrtho(false, config.getScreenUnitWidth(), config.getScreenUnitHeight());
     }
 
     @Override
@@ -33,6 +35,7 @@ public class Gametetr implements Screen {
     
     @Override
     public void resize(int width, int height) {
+        m_Config.setScreeSize(width, height);
     }
 
     @Override
