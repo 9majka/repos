@@ -28,7 +28,7 @@ public class MainMenuScreen implements Screen {
         game = gam;
         m_Config = new GameConfig();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
+        camera.setToOrtho(false, 480, 800);
         
         walkSheet = new Texture(Gdx.files.internal("drop.png"));
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COL, walkSheet.getHeight()/FRAME_ROWS);
@@ -55,16 +55,14 @@ public class MainMenuScreen implements Screen {
         stateTime += delta;
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         
+        game.font.setScale(2, 2);
+        game.font.setColor(0f, 1f, 0f, 1f);
         game.batch.begin();
-        game.font.draw(game.batch, "Welcome to Drop!!! ", 100, 150);
-        game.font.draw(game.batch, "Tap anywhere to begin!", 100, 100);
-        
-        game.batch.draw(currentFrame, 200, 0, 300, 200);
-        
+        game.font.draw(game.batch, "Click to Play", 100, 400);
+        //game.batch.draw(currentFrame, 200, 0, 300, 200);
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            
             game.setScreen(new Gametetr(game, m_Config));
             dispose();
         }
