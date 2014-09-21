@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 
 public class MainMenuScreen implements Screen {
 
@@ -19,6 +20,7 @@ public class MainMenuScreen implements Screen {
     
     Animation           walkAnimation;
     Texture             walkSheet;
+    Texture             mLogo;
     TextureRegion[]         walkFrames;
     TextureRegion           currentFrame;
 
@@ -29,6 +31,8 @@ public class MainMenuScreen implements Screen {
         m_Config = new GameConfig();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 480, 800);
+        
+        mLogo = new Texture(Gdx.files.internal("logo.png"));
         
         walkSheet = new Texture(Gdx.files.internal("drop.png"));
         TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth()/FRAME_COL, walkSheet.getHeight()/FRAME_ROWS);
@@ -46,7 +50,7 @@ public class MainMenuScreen implements Screen {
     
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         camera.update();
@@ -56,9 +60,11 @@ public class MainMenuScreen implements Screen {
         currentFrame = walkAnimation.getKeyFrame(stateTime, true);
         
         game.font.setScale(2, 2);
-        game.font.setColor(0f, 1f, 0f, 1f);
+        game.font.setColor(MathUtils.random(), MathUtils.random(), MathUtils.random(), 1f);
         game.batch.begin();
-        game.font.draw(game.batch, "Click to Play", 100, 400);
+        game.batch.draw(mLogo, 40, 400, 400, 100);
+        
+        game.font.draw(game.batch, "Click to Play", 150, 100);
         //game.batch.draw(currentFrame, 200, 0, 300, 200);
         game.batch.end();
 
