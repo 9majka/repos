@@ -6,7 +6,8 @@ public class GameConfig {
     
     private int mBlockHeight = 25;
     private int mCellUnitSize = mScreenUnitHeight/mBlockHeight;
-    private int mBlockWidth = mScreenUnitWidth/mCellUnitSize;
+    private int mBlockWidth = 10;
+    
 
     private int mScreenWidth = 0;
     private int mScreenHeight = 0;

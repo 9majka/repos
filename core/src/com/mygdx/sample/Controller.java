@@ -16,7 +16,7 @@ public class Controller implements ControllerListener, ModelListener{
     private Model m_Model;
     private FieldViewer m_FieldView;
     private ObjectFactory m_ObjectFactory;
-    private int m_Speed = 1;
+    private int m_Speed = 3;
     private boolean mAcceleration = false;
     private final GameConfig m_Config;
     GameState mState = GameState.Playing;
@@ -26,7 +26,7 @@ public class Controller implements ControllerListener, ModelListener{
         Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
         m_Model.setListener(this);
-        m_FieldView = new FieldViewer(config, config.getFieldUnitWidth(), config.getFieldUnitHeight());
+        m_FieldView = new FieldViewer(config, config.getFieldUnitWidth(), config.getScreenUnitHeight());
         m_ObjectFactory = new ObjectFactory(config);
         
         m_ActiveObj = m_ObjectFactory.getNextObject();
@@ -40,6 +40,9 @@ public class Controller implements ControllerListener, ModelListener{
     
     @Override
     public void onShiftToDeltaX(int delta) {
+        if(mState != GameState.Playing) {
+            return;
+        }
         if(mAcceleration == true) {
             return;
         }
@@ -66,6 +69,9 @@ public class Controller implements ControllerListener, ModelListener{
 
     @Override
     public void onRotate() {
+        if(mState != GameState.Playing) {
+            return;
+        }
         if(mAcceleration == true) {
             return;
         }
@@ -118,17 +124,22 @@ public class Controller implements ControllerListener, ModelListener{
     }
     
     public void updateGame() {
-        if(mState != GameState.GameOver) {
+        if(mState == GameState.Playing) {
             int speed = m_Speed;
             if(mAcceleration) {
                 speed = m_Config.getAccelerationSpeed();
             }
-            m_ActiveObj.moveDownDelta(speed);
-            if(m_Model.watchObject(m_ActiveObj)) {
-                m_Model.updateModel();
-                m_ActiveObj.dispose();
-                m_ActiveObj = null;
-                continuePlay();
+            if(m_ActiveObj != null) {
+                m_ActiveObj.moveDownDelta(speed);
+                int shiftX = m_ActiveObj.getShiftX();
+                int shiftY = m_ActiveObj.getShiftY();
+                Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
+                if(m_Model.proceessPoints(points, shiftX, shiftY)) {
+                    m_Model.updateModel();
+                    m_ActiveObj.dispose();
+                    m_ActiveObj = null;
+                    continuePlay();
+                }
             }
         }
     }
@@ -148,8 +159,10 @@ public class Controller implements ControllerListener, ModelListener{
     }
     
     public void draw(SpriteBatch batch) {
-        if(mState != GameState.GameOver) {
+        if(mState == GameState.Playing) {
             m_FieldView.draw(batch);
+        } else if(mState == GameState.GameOver) {
+            m_FieldView.drawGameOver(batch);
         }
     }
 }
