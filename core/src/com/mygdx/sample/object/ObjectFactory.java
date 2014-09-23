@@ -29,7 +29,7 @@ public class ObjectFactory {
     
     private GameObject createObject(ObjectType type) {
         //type = ObjectType.OT_STObject;
-        int blockSize = m_Config.getBlockUnitSize();
+        float blockSize = m_Config.mCellUnitHeight;
         switch (type) {
             case OT_TObject:
                 return new TObject(blockSize);

@@ -3,26 +3,30 @@ package com.mygdx.sample;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
 
 public class Model {
+    public class BlockItem {
+        public boolean mValue = false;
+        public int mType = 1;
+    }
     private final int m_BlockWidth;
     private final int m_BlockHeight;
-    private boolean m_Field[][];
+    private BlockItem m_Field[][];
     private ModelListener mListener = null;
 
-    private Texture m_Texture;
-    
     public Model(final int blockWidth, final int blocHeight) {
         m_BlockWidth = blockWidth;
         m_BlockHeight = blocHeight;
-        m_Field = new boolean[m_BlockWidth][m_BlockHeight + 1];
-        m_Texture = new Texture(Gdx.files.internal("drop_gray.png"));
+        m_Field = new BlockItem[m_BlockWidth][m_BlockHeight + 1];
         for(int i = 0; i < m_BlockWidth; i++) {
-            m_Field[i][0] = true;
+            for(int j = 0; j <= m_BlockHeight; j++) {
+                m_Field[i][j] = new BlockItem();
+            }
+        }
+        for(int i = 0; i < m_BlockWidth; i++) {
+            m_Field[i][0].mValue = true;
         }
     }
     
@@ -30,12 +34,8 @@ public class Model {
         mListener = listener;
     }
 
-    public final boolean[][] getField() {
+    public final BlockItem[][] getField() {
         return m_Field;
-    }
-    
-    public Texture getTexture() {
-        return m_Texture;
     }
     
     private boolean valid(int i, int j) {
@@ -53,7 +53,7 @@ public class Model {
             i = point.x + shiftX;
             j = point.y + shiftY;
             if(valid(i, j)) {
-                if(m_Field[i][j] == true) {
+                if(m_Field[i][j].mValue == true) {
                     return false;
                 }
             } else {
@@ -69,17 +69,17 @@ public class Model {
         for(GridPoint2 point : points) {
             i = point.x + shiftX;
             j = point.y + shiftY;
-            if(valid(i, j) && m_Field[i][j] == true) {
+            if(valid(i, j) && m_Field[i][j].mValue == true) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean proceessPoints (Array<GridPoint2> points, int shiftX, int shiftY) {
+    public boolean proceessPoints (Array<GridPoint2> points, int shiftX, int shiftY, int type) {
         for(GridPoint2 point : points) {
             if(interact(point.x + shiftX, point.y + shiftY)) {
-                receivePoints(points, shiftX, shiftY);
+                receivePoints(points, shiftX, shiftY, type);
                 return true;
             }
         }
@@ -87,13 +87,13 @@ public class Model {
     }
 
     private boolean interact(int i, int j) {
-        if(valid(i, j) && m_Field[i][j] == true) {
+        if(valid(i, j) && m_Field[i][j].mValue == true) {
             return true;
         }
         return false;
     }
     
-    private void receivePoints(Array<GridPoint2> points, int shiftX, int shiftY) {
+    private void receivePoints(Array<GridPoint2> points, int shiftX, int shiftY, int type) {
         int i = 0;
         int j = 0;
         boolean gameover = false;
@@ -101,7 +101,8 @@ public class Model {
             i = point.x + shiftX;
             j = point.y + 1 + shiftY;
             if(valid(i, j)) {
-                m_Field[i][j] = true;
+                m_Field[i][j].mValue = true;
+                m_Field[i][j].mType = type;
             }
             if(!gameover && j > m_BlockHeight) {
                 gameover = true;
@@ -117,7 +118,7 @@ public class Model {
         for(int j = 1; j <= m_BlockHeight; j++) {
             int count = 0;
             for(int i = 0; i < m_BlockWidth; i++) {
-                if(m_Field[i][j] == true) {
+                if(m_Field[i][j].mValue == true) {
                     count++;
                 } else {
                     break;
@@ -129,7 +130,12 @@ public class Model {
         }
         
         if(!selectedRows.isEmpty()) {
-            boolean field[][] = new boolean [m_BlockWidth][m_BlockHeight + 1];
+            BlockItem field[][] = new BlockItem [m_BlockWidth][m_BlockHeight + 1];
+            for(int i = 0; i < m_BlockWidth; i++) {
+                for(int j = 0; j <= m_BlockHeight; j++) {
+                    field[i][j] = new BlockItem();
+                }
+            }
             int next_j = 0;
             for(int j = 0; j <= m_BlockHeight; j++) {
                 while(selectedRows.contains(next_j)) {
@@ -137,9 +143,10 @@ public class Model {
                 }
                 for(int i = 0; i < m_BlockWidth; i++) {
                     if(next_j > m_BlockHeight) {
-                        field[i][j] = false;
+                        field[i][j].mValue = false;
                     } else {
-                        field[i][j] = m_Field[i][next_j];
+                        field[i][j].mValue = m_Field[i][next_j].mValue;
+                        field[i][j].mType = m_Field[i][next_j].mType;
                     }
                 }
                 next_j++;

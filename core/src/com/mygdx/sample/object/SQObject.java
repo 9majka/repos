@@ -10,7 +10,7 @@ public class SQObject extends GameObject{
         {3,3,3,3}
     };
 
-    public SQObject(final int blocSize) {
+    public SQObject(final float blocSize) {
         super(ObjectType.OT_SQObject, "drop_green.png", blocSize);
     }
 

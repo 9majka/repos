@@ -11,7 +11,7 @@ public class ZRObject extends GameObject{
         {0,6,0,6}
     };
 
-    public ZRObject(final int blocSize) {
+    public ZRObject(final float blocSize) {
         super(ObjectType.OT_ZRObject, "drop_pink.png", blocSize);
     }
 

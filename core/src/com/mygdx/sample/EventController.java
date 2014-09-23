@@ -22,7 +22,7 @@ public class EventController extends GestureAdapter{
     }
 
     private void proccessAcceleration(float y) {
-        int stepy = (int)y / mConfig.getBlockUnitSize();
+        int stepy = (int)(y / mConfig.mCellUnitHeight);
         if(mPanY == false) {
             mPanY = true;
             mStartPanY = stepy;
@@ -35,7 +35,7 @@ public class EventController extends GestureAdapter{
     }
     
     private void proccessShift(float x) {
-        int stepx = (int)x / mConfig.getBlockUnitSize();
+        int stepx = (int)(x / mConfig.mCellUnitWidth);
         if(mPanX == false) {
             mPanX = true;
             mStartPanX = stepx;

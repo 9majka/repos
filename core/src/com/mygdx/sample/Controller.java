@@ -6,6 +6,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.sample.object.GameObject;
+import com.mygdx.sample.object.GameObject.ObjectType;
 import com.mygdx.sample.object.ObjectFactory;
 
 public class Controller implements ControllerListener, ModelListener{
@@ -26,7 +27,7 @@ public class Controller implements ControllerListener, ModelListener{
         Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
         m_Model.setListener(this);
-        m_FieldView = new FieldViewer(config, config.getFieldUnitWidth(), config.getScreenUnitHeight());
+        m_FieldView = new FieldViewer(config);
         m_ObjectFactory = new ObjectFactory(config);
         
         m_ActiveObj = m_ObjectFactory.getNextObject();
@@ -134,7 +135,8 @@ public class Controller implements ControllerListener, ModelListener{
                 int shiftX = m_ActiveObj.getShiftX();
                 int shiftY = m_ActiveObj.getShiftY();
                 Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
-                if(m_Model.proceessPoints(points, shiftX, shiftY)) {
+                int type = ObjectType.toInt(m_ActiveObj.getType());
+                if(m_Model.proceessPoints(points, shiftX, shiftY, type)) {
                     m_Model.updateModel();
                     m_ActiveObj.dispose();
                     m_ActiveObj = null;

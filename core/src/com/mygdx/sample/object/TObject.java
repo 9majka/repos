@@ -11,7 +11,7 @@ public class TObject extends GameObject{
         {4,4,4,4}
     };
 
-    public TObject(final int blocSize) {
+    public TObject(final float blocSize) {
         super(ObjectType.OT_TObject, "drop_red.png", blocSize);
     }
 

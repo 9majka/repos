@@ -13,7 +13,7 @@ public abstract class GameObject {
     private int m_ShiftX = 0;//GameConfig.WIDTH / 2;
     private int m_ShiftY = 0;//GameConfig.HEIGHT - getObjectSize();
     private float m_UnitY = 0;
-    private final int m_BlockUnitSize;
+    private final float m_BlockUnitHeight;
     private ObjectRotation state = ObjectRotation.OR_0;
     
     private Array<GridPoint2> m_Points;
@@ -23,11 +23,11 @@ public abstract class GameObject {
     private FileHandle m_TexureFile;
     private Texture m_Texture;
     
-    public GameObject(final ObjectType type, String file, final int blockSize) {
+    public GameObject(final ObjectType type, String file, final float blockSize) {
         m_Type = type;
-        m_BlockUnitSize = blockSize;
+        m_BlockUnitHeight = blockSize;
         m_TexureFile = Gdx.files.internal(file);
-        m_UnitY = m_ShiftY * m_BlockUnitSize;
+        m_UnitY = m_ShiftY * m_BlockUnitHeight;
         initPoints();
         initTextures();
     }
@@ -153,7 +153,7 @@ public abstract class GameObject {
     public void shiftYTo(int step)
     {
         m_ShiftY = step;
-        m_UnitY = m_BlockUnitSize * m_ShiftY;
+        m_UnitY = m_BlockUnitHeight * m_ShiftY;
         movePosY();
     }
 
@@ -168,9 +168,35 @@ public abstract class GameObject {
     }
     
     private void movePosY() {
-        m_ShiftY = (int)m_UnitY/m_BlockUnitSize;
+        m_ShiftY = (int)(m_UnitY / m_BlockUnitHeight);
         if(m_UnitY < 0) {
             m_ShiftY = m_ShiftY - 1;
+        }
+    }
+    
+    public static String getTextureFileRath(int type) {
+        ObjectType objType = ObjectType.fromOrdinal(type);
+        return getTextureFileRath(objType);
+    }
+
+    public static String getTextureFileRath(ObjectType type) {
+        switch (type) {
+            case OT_TObject:
+                return "drop_red.png";
+            case OT_GLObject:
+                return "drop_blue.png";
+            case OT_GRObject:
+                return "drop_bir.png";
+            case OT_SQObject:
+                return "drop_green.png";
+            case OT_ZLObject:
+                return "drop.png";
+            case OT_ZRObject:
+                return "drop_pink.png";
+            case OT_STObject:
+                return "drop_yellow.png";
+            default: 
+                return "drop_gray.png";
         }
     }
     

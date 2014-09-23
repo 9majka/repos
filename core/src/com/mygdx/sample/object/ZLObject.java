@@ -10,7 +10,7 @@ public class ZLObject extends GameObject{
         {2,3,2,3}
     };
 
-    public ZLObject(final int blocSize) {
+    public ZLObject(final float blocSize) {
         super(ObjectType.OT_ZLObject, "drop.png", blocSize);
     }
 

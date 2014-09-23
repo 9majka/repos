@@ -1,38 +1,90 @@
 package com.mygdx.sample;
 
 public class GameConfig {
-    private int mScreenUnitWidth = 480;
-    private int mScreenUnitHeight = 800;
-    
-    private int mBlockHeight = 25;
-    private int mCellUnitSize = mScreenUnitHeight/mBlockHeight;
-    private int mBlockWidth = 10;
-    
-
     private int mScreenWidth = 0;
     private int mScreenHeight = 0;
-    private int mAccelerationSpeed = 15;
     
+    private float mScreenUnitWidth = 480f;
+    private float mScreenUnitHeight = 800f;
+
+    private int mFieldUnitNormalizeHeight = 23;
+    private int mBlockHeight = 22;
+    private int mBlockWidth = 10;
+    private int mFieldUnitNormalizeWidth = 14;
+    public float mCellUnitHeight = mScreenUnitHeight/mFieldUnitNormalizeHeight;
+    public float mCellUnitWidth = mCellUnitHeight;
+
+    
+    private float mFieldUnitWidth = mCellUnitWidth * mBlockWidth;
+    private float mFieldUnitHeight = mCellUnitHeight * mBlockHeight;
+
     private float mPxPerUnitWidth = mScreenWidth/mScreenUnitWidth;
     private float mPxPerUnitHeight = mScreenHeight/mScreenUnitHeight;
+    
+    private float mPaddingHor = 0f;
+    private float mPaddingVert = 0f;
+    
+    private int mAccelerationSpeed = 15;
+    
+    private void updateAspectRatio() {
+        float aspect = (float)mScreenWidth/mScreenHeight;
+        mScreenUnitWidth = mScreenUnitHeight * aspect;
+
+        mCellUnitHeight = mScreenUnitHeight/mFieldUnitNormalizeHeight;
+        mCellUnitWidth = mCellUnitHeight;
+        
+        mFieldUnitWidth = mCellUnitWidth * mBlockWidth;
+        mFieldUnitHeight = mCellUnitHeight * mBlockHeight;
+        
+        mPaddingHor = (mScreenUnitWidth - mFieldUnitWidth - 3*mCellUnitWidth)/3;
+        mPaddingVert = (mScreenUnitHeight - mFieldUnitHeight)/2;
+        
+        if(mPaddingHor < 0) {
+            mCellUnitWidth = mScreenUnitWidth/mFieldUnitNormalizeWidth;
+            mCellUnitHeight = mCellUnitWidth;
+            
+            mFieldUnitWidth = mCellUnitWidth * mBlockWidth;
+            mFieldUnitHeight = mCellUnitHeight * mBlockHeight;
+            
+            mPaddingHor = (mScreenUnitWidth - mFieldUnitWidth - 3*mCellUnitWidth)/3;
+            mPaddingVert = (mScreenUnitHeight - mFieldUnitHeight)/2;
+        }
+    }
     
     public void setScreeSize(int width, int height) {
         mScreenWidth = width;
         mScreenHeight = height;
-        
+
+        updateAspectRatio();
         mPxPerUnitWidth = (float)mScreenWidth/mScreenUnitWidth;
         mPxPerUnitHeight = (float)mScreenHeight/mScreenUnitHeight;
+    }
+    
+    public float getHorizontalPadding() {
+        return mPaddingHor;
+    }
+    
+    public float getVerticalPadding() {
+        return mPaddingVert;
     }
     
     public int getAccelerationSpeed() {
         return mAccelerationSpeed;
     }
     
-    public int getScreenUnitWidth() {
+    public float getFiledUnitWidth() {
+        return mFieldUnitWidth;
+    }
+    
+    public float getFiledUnitHeight() {
+        return mFieldUnitHeight;
+    }
+    
+    public float getScreenUnitWidth() {
         return mScreenUnitWidth;
     }
     
-    public int getScreenUnitHeight() {
+    public float getScreenUnitHeight() {
         return mScreenUnitHeight;
     }
     
@@ -60,16 +112,12 @@ public class GameConfig {
         return mBlockHeight;
     }
     
-    public int getBlockUnitSize() {
-        return mCellUnitSize;
+    public float getFieldUnitWidth() {
+        return mFieldUnitWidth;
     }
     
-    public int getFieldUnitWidth() {
-        return mBlockWidth * mCellUnitSize;
-    }
-    
-    public int getFieldUnitHeight() {
-        return mBlockHeight * mCellUnitSize;
+    public float getFieldUnitHeight() {
+        return mFieldUnitHeight;
     }
     
     public int getAccelerationCondition() {

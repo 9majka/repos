@@ -9,11 +9,11 @@ public class Gametetr implements Screen {
     private final Drop game;
     private Controller controller;
     private OrthographicCamera camera;
-    private GameConfig m_Config;
+    private GameConfig mConfig;
 
     public Gametetr(final Drop gam, GameConfig config){
         this.game = gam;
-        m_Config = config;
+        mConfig = config;
         controller = new Controller(config);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, config.getScreenUnitWidth(), config.getScreenUnitHeight());
@@ -21,21 +21,22 @@ public class Gametetr implements Screen {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0, 0, 0.2f, 1);
+        Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
        
         game.batch.setProjectionMatrix(camera.combined);
-        
         controller.updateGame();
         game.batch.begin();
         controller.draw(game.batch);
+        game.batch.flush();
         game.batch.end();
     }
     
     @Override
     public void resize(int width, int height) {
-        m_Config.setScreeSize(width, height);
+        mConfig.setScreeSize(width, height);
+        camera.setToOrtho(false, mConfig.getScreenUnitWidth(), mConfig.getScreenUnitHeight());
     }
 
     @Override

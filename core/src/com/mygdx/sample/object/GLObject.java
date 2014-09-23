@@ -10,7 +10,7 @@ public class GLObject extends GameObject{
         {1,3,7,5}
     };
 
-    public GLObject(final int blocSize) {
+    public GLObject(final float blocSize) {
         super(ObjectType.OT_GLObject, "drop_blue.png", blocSize);
     }
 
