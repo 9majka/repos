@@ -14,6 +14,8 @@ public class FieldViewer {
     private Texture FieldBg;
     private Texture mPaddingH;
     private Texture mPaddingV;
+    private Texture mPanel;
+    private Texture mLayer;
     private Texture mGameOverTexture = null;
     private GameObject mActiveObj = null;
     private Model mModel = null;
@@ -26,6 +28,8 @@ public class FieldViewer {
         FieldBg = new Texture(Gdx.files.internal("field_bg.jpg"));
         mPaddingH = new Texture(Gdx.files.internal("padding.png"));
         mPaddingV = new Texture(Gdx.files.internal("paddingVer.png"));
+        mPanel = new Texture(Gdx.files.internal("panel.png"));
+        mLayer = new Texture(Gdx.files.internal("layer.png"));
         mGameOverTexture = new Texture(Gdx.files.internal("gameover.png"));
         int types = ObjectType.toInt(ObjectType.OT_MAXObject);
         mTextures = new Texture[types];
@@ -58,16 +62,25 @@ public class FieldViewer {
     
     private void drawPaddings(SpriteBatch batch) {
         float x = 0f;
+        x = 2* mConfig.getHorizontalPadding() + mConfig.getFieldUnitWidth();
+        batch.draw(mPanel, x, 0, mConfig.mPanelUnitWidth, mConfig.getScreenUnitHeight());
+        float y = mConfig.getScreenUnitHeight() - mConfig.mPanelUnitWidth - mConfig.getVerticalPadding() - 1;
+        batch.draw(mLayer, x + 1, y, mConfig.mPanelUnitWidth - 2, mConfig.mPanelUnitWidth - 2);
+        
+        
         batch.draw(mPaddingH, 0, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
-        x += mConfig.getHorizontalPadding() + mConfig.getFieldUnitWidth();
+        x = mConfig.getHorizontalPadding() + mConfig.getFieldUnitWidth();
         batch.draw(mPaddingH, x, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
         x = mConfig.getScreenUnitWidth() - mConfig.getHorizontalPadding();
         batch.draw(mPaddingH, x, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
         
-        float y = 0f;
         batch.draw(mPaddingV, 0, 0, mConfig.getScreenUnitWidth(), mConfig.getVerticalPadding());
         y = mConfig.getScreenUnitHeight() - mConfig.getVerticalPadding();
         batch.draw(mPaddingV, 0, y, mConfig.getScreenUnitWidth(), mConfig.getVerticalPadding());
+        
+        
+
+        
     }
     
     public void drawGameOver(SpriteBatch batch) {

@@ -21,7 +21,8 @@ public class GameConfig {
 
     private float mFieldUnitWidth = mCellUnitWidth * mBlockWidth;
     private float mFieldUnitHeight = mCellUnitHeight * mBlockHeight;
-
+    public float mPanelUnitWidth = mCellUnitHeight * mPanelWidth;
+    
     private float mPxPerUnitWidth = mScreenWidth/mScreenUnitWidth;
     private float mPxPerUnitHeight = mScreenHeight/mScreenUnitHeight;
     
@@ -48,6 +49,7 @@ public class GameConfig {
         mCellUnitWidth = mCellUnitHeight;
         mFieldUnitWidth = mCellUnitWidth * mBlockWidth;
         mFieldUnitHeight = mCellUnitHeight * mBlockHeight;
+        mPanelUnitWidth = mCellUnitHeight * mPanelWidth;
         mPaddingHor = (mScreenUnitWidth - mFieldUnitWidth - mPanelWidth*mCellUnitWidth)/3;
         mPaddingVert = (mScreenUnitHeight - mFieldUnitHeight)/2;
     }
