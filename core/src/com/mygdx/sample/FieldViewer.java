@@ -48,18 +48,15 @@ public class FieldViewer {
                   , mConfig.getFieldUnitWidth()
                   , mConfig.getFieldUnitHeight());
 
+        drawModel(batch);
         if(mActiveObj != null) {
             drawObject(batch);
         }
-        drawModel(batch);
+
         drawPaddings(batch);
     }
     
     private void drawPaddings(SpriteBatch batch) {
-//        mConfig.getHorizontalPadding()
-//        , mConfig.getVerticalPadding()
-//        , mConfig.getFieldUnitWidth()
-//        , mConfig.getFieldUnitHeight());
         float x = 0f;
         batch.draw(mPaddingH, 0, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
         x += mConfig.getHorizontalPadding() + mConfig.getFieldUnitWidth();
@@ -117,7 +114,7 @@ public class FieldViewer {
 
         for(int j = 1; j <= mConfig.getFieldBlockHeight(); j++) {
             for(int i = 0; i < mConfig.getFieldBlockWidth(); i++) {
-                if(field[i][j].mValue == true) {
+                if(field[i][j].mValue == true){
                     batch.draw(mTextures[field[i][j].mType], i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
                 }
             }
