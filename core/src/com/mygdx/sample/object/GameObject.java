@@ -174,11 +174,37 @@ public abstract class GameObject {
         }
     }
     
+    public static String getPreviewObjectFileRath(int type) {
+        ObjectType objType = ObjectType.fromOrdinal(type);
+        return getPreviewObjectFileRath(objType);
+    }
+    
+    public static String getPreviewObjectFileRath(ObjectType type) {
+        switch (type) {
+            case OT_TObject:
+                return "preview/tob.png";
+            case OT_GLObject:
+                return "preview/glob.png";
+            case OT_GRObject:
+                return "preview/grob.png";
+            case OT_SQObject:
+                return "preview/sqob.png";
+            case OT_ZLObject:
+                return "preview/zlob.png";
+            case OT_ZRObject:
+                return "preview/zrob.png";
+            case OT_STObject:
+                return "preview/stob.png";
+            default: 
+                return "drop_gray.png";
+        }
+    }
+    
     public static String getTextureFileRath(int type) {
         ObjectType objType = ObjectType.fromOrdinal(type);
         return getTextureFileRath(objType);
     }
-
+    
     public static String getTextureFileRath(ObjectType type) {
         switch (type) {
             case OT_TObject:

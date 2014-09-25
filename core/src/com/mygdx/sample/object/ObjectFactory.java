@@ -23,7 +23,7 @@ public class ObjectFactory {
     
     private void generateNext() {
         m_CurrentType = m_NextType;
-        int rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject));
+        int rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject) - 1);
         m_NextType = ObjectType.fromOrdinal(rand);
     }
     
@@ -54,5 +54,9 @@ public class ObjectFactory {
         generateNext();
         GameObject object = createObject(m_CurrentType);
         return object;
+    }
+    
+    public ObjectType getNextObjectType() {
+        return m_NextType;
     }
 }

@@ -15,7 +15,7 @@ public class Controller implements ControllerListener, ModelListener{
     
     private GameObject m_ActiveObj;
     private Model m_Model;
-    private FieldViewer m_FieldView;
+    private FieldView m_FieldView;
     private ObjectFactory m_ObjectFactory;
     private int m_Speed = 3;
     private boolean mAcceleration = false;
@@ -27,7 +27,7 @@ public class Controller implements ControllerListener, ModelListener{
         Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
         m_Model.setListener(this);
-        m_FieldView = new FieldViewer(config);
+        m_FieldView = new FieldView(config);
         m_ObjectFactory = new ObjectFactory(config);
         
         m_ActiveObj = m_ObjectFactory.getNextObject();
@@ -35,6 +35,7 @@ public class Controller implements ControllerListener, ModelListener{
         int shiftY = config.getFieldBlockHeight();
         m_ActiveObj.shiftTo(shiftX, shiftY);
         m_FieldView.setActiveObject(m_ActiveObj);
+        m_FieldView.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         m_FieldView.setModel(m_Model);
         //Gdx.graphics.setContinuousRendering(false);
     }
@@ -116,11 +117,11 @@ public class Controller implements ControllerListener, ModelListener{
         if(mState == GameState.Playing) {
             mAcceleration = false;
             m_ActiveObj = m_ObjectFactory.getNextObject();
-            
             int shiftX = m_Config.getFieldBlockWidth()/2;
             int shiftY = m_Config.getFieldBlockHeight();
             m_ActiveObj.shiftTo(shiftX, shiftY);
             m_FieldView.setActiveObject(m_ActiveObj);
+            m_FieldView.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         }
     }
     
