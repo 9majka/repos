@@ -1,6 +1,7 @@
 package com.mygdx.sample.object;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.sample.GameConfig;
 import com.mygdx.sample.object.GameObject.ObjectType;
 
@@ -8,6 +9,8 @@ public class ObjectFactory {
     private ObjectType m_CurrentType;
     private ObjectType m_NextType;
     private final GameConfig m_Config;
+    private Array<GameObject> mObjects;
+    
     
     public ObjectFactory(final GameConfig config) {
         m_Config = config;
@@ -15,6 +18,11 @@ public class ObjectFactory {
     }
     
     private void init() {
+        mObjects = new Array<GameObject>();
+        for(ObjectType type: ObjectType.values()) {
+            mObjects.add(createObject(type));
+        }
+
         int rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject));
         m_CurrentType = ObjectType.fromOrdinal(rand);
         rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject));
@@ -52,11 +60,15 @@ public class ObjectFactory {
     
     public GameObject getNextObject() {
         generateNext();
-        GameObject object = createObject(m_CurrentType);
+        GameObject object = mObjects.get(ObjectType.toInt(m_CurrentType));//createObject();
         return object;
     }
     
     public ObjectType getNextObjectType() {
         return m_NextType;
+    }
+    
+    public void dispose() {
+        //TODO dispose created textures
     }
 }

@@ -18,7 +18,7 @@ public class FieldView {
     private Model mModel = null;
     private final int mOffset = 1;
     public float scale = 0f;
-    private Texture[] mTextures;
+    private Array<Texture> mTextures;
     private PanelView mPanel;
 
     public FieldView(final GameConfig config) {
@@ -28,9 +28,9 @@ public class FieldView {
         FieldBg = new Texture(Gdx.files.internal("field_bg.jpg"));
         mGameOverTexture = new Texture(Gdx.files.internal("gameover.png"));
         int types = ObjectType.toInt(ObjectType.OT_MAXObject);
-        mTextures = new Texture[types];
+        mTextures = new Array<Texture>();
         for(int i = 0; i < types; i++) {
-            mTextures[i] = new Texture(Gdx.files.internal(GameObject.getTextureFileRath(i)));
+            mTextures.add(new Texture(Gdx.files.internal(GameObject.getTextureFileRath(i))));
         }
     }
     
@@ -105,9 +105,17 @@ public class FieldView {
         for(int j = 1; j <= mConfig.getFieldBlockHeight(); j++) {
             for(int i = 0; i < mConfig.getFieldBlockWidth(); i++) {
                 if(field[i][j].mValue == true) {
-                    batch.draw(mTextures[field[i][j].mType], i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
+                    batch.draw(mTextures.get(field[i][j].mType), i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
                 }
             }
+        }
+    }
+    
+    public void dispose() {
+        mPanel.dispose();
+        mGameOverTexture.dispose();
+        for(Texture text: mTextures) {
+            text.dispose();
         }
     }
 }

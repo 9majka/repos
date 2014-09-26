@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.sample.object.GameObject;
 import com.mygdx.sample.object.GameObject.ObjectType;
 
@@ -14,7 +15,7 @@ public class PanelView {
     private Texture mPanel;
     private Texture mLayer;
     
-    private Texture[] mPreviewTextures;
+    private Array<Texture> mPreviewTextures;
     private int mNextObject = 0;
     
     private BitmapFont mFont;
@@ -31,10 +32,10 @@ public class PanelView {
         mFont.setScale(2, 2);
         
         int types = ObjectType.toInt(ObjectType.OT_MAXObject);
-        mPreviewTextures = new Texture[types];
+        mPreviewTextures = new Array<Texture>();
         
         for(int i = 0; i < types; i++) {
-            mPreviewTextures[i] = new Texture(Gdx.files.internal(GameObject.getPreviewObjectFileRath(i)));
+            mPreviewTextures.add(new Texture(Gdx.files.internal(GameObject.getPreviewObjectFileRath(i))));
         }
     }
     
@@ -49,7 +50,7 @@ public class PanelView {
         float y = 0f;
         float w = mCnfg.mPanelUnitWidth;
         float h = mCnfg.getScreenUnitHeight();
-        
+     // TODO /optimizaton; Layout is static. use only once calculation
         batch.draw(mPanel, x, y, w, h);
         
         float padding = 0f;
@@ -58,7 +59,7 @@ public class PanelView {
         w = w - 2*padding;
         h = w;
         batch.draw(mLayer, x, y, w, h);
-        batch.draw(mPreviewTextures[mNextObject], x, y, w, h);
+        batch.draw(mPreviewTextures.get(mNextObject), x, y, w, h);
         
         y = y - 200;
         h = h/2;
@@ -73,7 +74,7 @@ public class PanelView {
     private void drawPaddings(SpriteBatch batch) {
         float x = 0f;
         float y = 0f;
-
+     // TODO /optimizaton; Paddings is static. use only once calculation
         batch.draw(mPaddingH, x, 0, mCnfg.getHorizontalPadding(), mCnfg.getScreenUnitHeight());
         
         x = mCnfg.getHorizontalPadding() + mCnfg.getFieldUnitWidth();
@@ -90,5 +91,17 @@ public class PanelView {
     public void draw(SpriteBatch batch) {
         drawPanel(batch);
         drawPaddings(batch);
+    }
+    
+    public void dispose() {
+        mPaddingH.dispose();
+        mPaddingV.dispose();
+        mPanel.dispose();
+        mLayer.dispose();
+        for(Texture text: mPreviewTextures) {
+            text.dispose();
+        }
+        
+        mFont.dispose();
     }
 }

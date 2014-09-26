@@ -15,6 +15,7 @@ public class Model {
     private final int m_BlockHeight;
     private BlockItem m_Field[][];
     private ModelListener mListener = null;
+    private Set<Integer> mSelectedRows = new HashSet<Integer>();
 
     public Model(final int blockWidth, final int blocHeight) {
         m_BlockWidth = blockWidth;
@@ -113,8 +114,8 @@ public class Model {
         }
     }
     
-    public void updateModel() {
-        Set<Integer> selectedRows = new HashSet<Integer>();
+    public void updateModel() {  // TODO /optimizaton; find only new received lines
+        mSelectedRows.clear();
         for(int j = 1; j <= m_BlockHeight; j++) {
             int count = 0;
             for(int i = 0; i < m_BlockWidth; i++) {
@@ -125,12 +126,12 @@ public class Model {
                 }
             }
             if(count == m_BlockWidth) {
-                selectedRows.add(j);
+                mSelectedRows.add(j);
             }
         }
         
-        if(!selectedRows.isEmpty()) {
-            BlockItem field[][] = new BlockItem [m_BlockWidth][m_BlockHeight + 1];
+        if(!mSelectedRows.isEmpty()) {
+            BlockItem field[][] = new BlockItem [m_BlockWidth][m_BlockHeight + 1];// TODO /optimizaton; use old array for update
             for(int i = 0; i < m_BlockWidth; i++) {
                 for(int j = 0; j <= m_BlockHeight; j++) {
                     field[i][j] = new BlockItem();
@@ -138,7 +139,7 @@ public class Model {
             }
             int next_j = 0;
             for(int j = 0; j <= m_BlockHeight; j++) {
-                while(selectedRows.contains(next_j)) {
+                while(mSelectedRows.contains(next_j)) {
                     next_j++;
                 }
                 for(int i = 0; i < m_BlockWidth; i++) {

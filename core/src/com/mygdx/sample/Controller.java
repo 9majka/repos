@@ -139,7 +139,6 @@ public class Controller implements ControllerListener, ModelListener{
                 int type = ObjectType.toInt(m_ActiveObj.getType());
                 if(m_Model.proceessPoints(points, shiftX, shiftY, type)) {
                     m_Model.updateModel();
-                    m_ActiveObj.dispose();
                     m_ActiveObj = null;
                     continuePlay();
                 }
@@ -167,5 +166,10 @@ public class Controller implements ControllerListener, ModelListener{
         } else if(mState == GameState.GameOver) {
             m_FieldView.drawGameOver(batch);
         }
+    }
+    
+    public void dispose() {
+        m_FieldView.dispose();
+        m_ObjectFactory.dispose();
     }
 }

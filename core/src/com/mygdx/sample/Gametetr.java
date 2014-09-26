@@ -21,8 +21,8 @@ public class Gametetr implements Screen {
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //Gdx.gl.glClearColor(0.3f, 0.3f, 0.3f, 1); //TODO check if need 
+        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         camera.update();
        
         game.batch.setProjectionMatrix(camera.combined);
@@ -57,5 +57,6 @@ public class Gametetr implements Screen {
 
     @Override
     public void dispose() {
+        controller.dispose();
     }
 }
