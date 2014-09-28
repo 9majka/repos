@@ -1,4 +1,4 @@
-package com.mygdx.sample.object;
+package com.game.tetris.object;
 
 public class STObject extends GameObject{
     private final int celsCount = 4;

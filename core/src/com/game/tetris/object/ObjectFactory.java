@@ -1,17 +1,16 @@
-package com.mygdx.sample.object;
+package com.game.tetris.object;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.sample.GameConfig;
-import com.mygdx.sample.object.GameObject.ObjectType;
+import com.game.tetris.object.GameObject.ObjectType;
+import com.game.tetris.screen.GameConfig;
 
 public class ObjectFactory {
     private ObjectType m_CurrentType;
     private ObjectType m_NextType;
     private final GameConfig m_Config;
     private Array<GameObject> mObjects;
-    
-    
+
     public ObjectFactory(final GameConfig config) {
         m_Config = config;
         init();
@@ -23,15 +22,19 @@ public class ObjectFactory {
             mObjects.add(createObject(type));
         }
 
-        int rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject));
+        int start = ObjectType.toInt(ObjectType.OT_None) + 1;
+        int end = ObjectType.toInt(ObjectType.OT_MAXObject) - 1;
+        int rand = MathUtils.random(start, end);
         m_CurrentType = ObjectType.fromOrdinal(rand);
-        rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject));
+        rand = MathUtils.random(start, end);
         m_NextType = ObjectType.fromOrdinal(rand);
     }
     
     private void generateNext() {
         m_CurrentType = m_NextType;
-        int rand = MathUtils.random(0, ObjectType.toInt(ObjectType.OT_MAXObject) - 1);
+        int start = ObjectType.toInt(ObjectType.OT_None) + 1;
+        int end = ObjectType.toInt(ObjectType.OT_MAXObject) - 1;
+        int rand = MathUtils.random(start, end);
         m_NextType = ObjectType.fromOrdinal(rand);
     }
     
@@ -69,6 +72,8 @@ public class ObjectFactory {
     }
     
     public void dispose() {
-        //TODO dispose created textures
+        for(GameObject object: mObjects) {
+            object.dispose();
+        }
     }
 }

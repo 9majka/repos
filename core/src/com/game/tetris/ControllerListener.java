@@ -1,4 +1,4 @@
-package com.mygdx.sample;
+package com.game.tetris;
 
 
 public interface ControllerListener {

@@ -1,6 +1,7 @@
-package com.mygdx.sample;
+package com.game.tetris;
 
 import com.badlogic.gdx.input.GestureDetector.GestureAdapter;
+import com.game.tetris.screen.GameConfig;
 
 public class EventController extends GestureAdapter{
     private final ControllerListener mListener;

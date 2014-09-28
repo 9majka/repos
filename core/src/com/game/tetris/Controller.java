@@ -1,13 +1,15 @@
-package com.mygdx.sample;
+package com.game.tetris;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.sample.object.GameObject;
-import com.mygdx.sample.object.GameObject.ObjectType;
-import com.mygdx.sample.object.ObjectFactory;
+import com.game.tetris.object.GameObject;
+import com.game.tetris.object.ObjectFactory;
+import com.game.tetris.object.GameObject.ObjectType;
+import com.game.tetris.screen.GameConfig;
+import com.game.tetris.view.FieldView;
 
 public class Controller implements ControllerListener, ModelListener{
     
@@ -37,7 +39,6 @@ public class Controller implements ControllerListener, ModelListener{
         m_FieldView.setActiveObject(m_ActiveObj);
         m_FieldView.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         m_FieldView.setModel(m_Model);
-        //Gdx.graphics.setContinuousRendering(false);
     }
     
     @Override
@@ -127,17 +128,26 @@ public class Controller implements ControllerListener, ModelListener{
     
     public void updateGame() {
         if(mState == GameState.Playing) {
-            int speed = m_Speed;
-            if(mAcceleration) {
-                speed = m_Config.getAccelerationSpeed();
-            }
-            if(m_ActiveObj != null) {
-                m_ActiveObj.moveDownDelta(speed);
+            process();
+        }
+    }
+    
+    private void process() {
+        int speed = m_Speed;
+        if(mAcceleration) {
+            speed = m_Config.getAccelerationSpeed();
+        }
+        if(m_ActiveObj != null) {
+            int shiftY = m_ActiveObj.getShiftY();
+            
+            m_ActiveObj.moveDownDelta(speed);
+            int shiftYNew = m_ActiveObj.getShiftY();
+
+            if(shiftY != shiftYNew) {
                 int shiftX = m_ActiveObj.getShiftX();
-                int shiftY = m_ActiveObj.getShiftY();
                 Array<GridPoint2> points = m_ActiveObj.getAbsolutePoints();
-                int type = ObjectType.toInt(m_ActiveObj.getType());
-                if(m_Model.proceessPoints(points, shiftX, shiftY, type)) {
+                short type = (short)ObjectType.toInt(m_ActiveObj.getType());
+                if(m_Model.proceessPoints(points, shiftX, shiftYNew, type)) {
                     m_Model.updateModel();
                     m_ActiveObj = null;
                     continuePlay();

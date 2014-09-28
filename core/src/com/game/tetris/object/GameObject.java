@@ -1,4 +1,4 @@
-package com.mygdx.sample.object;
+package com.game.tetris.object;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -274,14 +274,15 @@ public abstract class GameObject {
     }
     
     public enum ObjectType {
-        OT_TObject(0),
+        OT_None(0),
         OT_GLObject(1),
         OT_GRObject(2),
         OT_SQObject(3),
         OT_ZLObject(4),
         OT_ZRObject(5),
         OT_STObject(6),
-        OT_MAXObject(7);
+        OT_TObject(7),
+        OT_MAXObject(8);
         private final int m_Value;
         ObjectType(int value) {
             m_Value = value;

@@ -1,13 +1,14 @@
-package com.mygdx.sample;
+package com.game.tetris.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.sample.Model.BlockItem;
-import com.mygdx.sample.object.GameObject;
-import com.mygdx.sample.object.GameObject.ObjectType;
+import com.game.tetris.Model;
+import com.game.tetris.object.GameObject;
+import com.game.tetris.object.GameObject.ObjectType;
+import com.game.tetris.screen.GameConfig;
 
 public class FieldView {
     private final GameConfig mConfig;
@@ -98,14 +99,19 @@ public class FieldView {
     private void drawModel(SpriteBatch batch) {
         float paddingLeft = mConfig.getHorizontalPadding();
         float paddingBottom = mConfig.getVerticalPadding();
-        BlockItem field[][] = mModel.getField();
+        short field[][] = mModel.getField();
         float width = mConfig.mCellUnitWidth;
         float height = mConfig.mCellUnitHeight;
 
+        int i = 0;
+        short value = 0;
         for(int j = 1; j <= mConfig.getFieldBlockHeight(); j++) {
-            for(int i = 0; i < mConfig.getFieldBlockWidth(); i++) {
-                if(field[i][j].mValue == true) {
-                    batch.draw(mTextures.get(field[i][j].mType), i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
+            for(i = 0; i < mConfig.getFieldBlockWidth(); i++) {
+             // TODO Start /optimization find the problem 
+                value = field[i][j];
+             // TODO END /optimization find the problem 
+                if(value != 0) {
+                    batch.draw(mTextures.get(0), i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
                 }
             }
         }

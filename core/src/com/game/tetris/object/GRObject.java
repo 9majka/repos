@@ -1,18 +1,18 @@
-package com.mygdx.sample.object;
+package com.game.tetris.object;
 
 
-public class ZRObject extends GameObject{
+public class GRObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {7,5,7,5},
+        {7,5,1,3},
+        {8,2,0,6},
         {4,4,4,4},
-        {3,7,3,7},
-        {0,6,0,6}
+        {1,3,7,5}
     };
 
-    public ZRObject(final float blocSize) {
-        super(ObjectType.OT_ZRObject, "drop_pink.png", blocSize);
+    public GRObject(final float blocSize) {
+        super(ObjectType.OT_GRObject, "drop_bir.png", blocSize);
     }
 
     @Override

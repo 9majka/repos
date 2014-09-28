@@ -1,17 +1,17 @@
-package com.mygdx.sample.object;
+package com.game.tetris.object;
 
-public class GLObject extends GameObject{
+public class ZLObject extends GameObject{
     private final int celsCount = 4;
     private final int objectSize = 3;
     private static int m_RotationStates[][] = {
-        {6,8,2,0},
-        {7,5,1,3},
-        {4,4,4,4},
-        {1,3,7,5}
+        {7,8,7,8},
+        {4,7,4,7},
+        {5,4,5,4},
+        {2,3,2,3}
     };
 
-    public GLObject(final float blocSize) {
-        super(ObjectType.OT_GLObject, "drop_blue.png", blocSize);
+    public ZLObject(final float blocSize) {
+        super(ObjectType.OT_ZLObject, "drop.png", blocSize);
     }
 
     @Override
