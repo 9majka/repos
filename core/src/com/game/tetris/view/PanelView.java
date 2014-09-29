@@ -85,7 +85,8 @@ public class PanelView {
         Label label = new Label("1", skin);
         label.setAlignment(Align.right);
         label.setPosition(x, y - 200);
-        label.setSize(w, w/2);
+        label.setSize(w - 5, w/2);
+        label.setFontScale(2);
         mStage.addActor(label);
         
         Image level = new Image(new Texture(Gdx.files.internal("level.png")));
@@ -103,7 +104,8 @@ public class PanelView {
         mScoreLabel = new Label("00000", skin);
         mScoreLabel.setAlignment(Align.right);
         mScoreLabel.setPosition(x, scoreY);
-        mScoreLabel.setSize(w, w/2);
+        mScoreLabel.setSize(w - 5, w/2);
+        mScoreLabel.setFontScale(2);
         mStage.addActor(mScoreLabel);
         
         Image score = new Image(new Texture(Gdx.files.internal("score.png")));
