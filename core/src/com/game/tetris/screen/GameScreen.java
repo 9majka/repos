@@ -27,6 +27,7 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
         controller.updateGame();
+        controller.updatePanel();
         game.batch.begin();
         controller.draw(game.batch);
         game.batch.flush();

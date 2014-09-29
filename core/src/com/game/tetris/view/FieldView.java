@@ -20,12 +20,12 @@ public class FieldView {
     private final int mOffset = 1;
     public float scale = 0f;
     private Array<Texture> mTextures;
-    private PanelView mPanel;
+    private Texture mPaddingH;
+    private Texture mPaddingV;
 
     public FieldView(final GameConfig config) {
         mConfig = config;
-        mPanel = new PanelView(config);
-        
+
         FieldBg = new Texture(Gdx.files.internal("field_bg.jpg"));
         mGameOverTexture = new Texture(Gdx.files.internal("gameover.png"));
         int types = ObjectType.toInt(ObjectType.OT_MAXObject);
@@ -33,6 +33,9 @@ public class FieldView {
         for(int i = 0; i < types; i++) {
             mTextures.add(new Texture(Gdx.files.internal(GameObject.getTextureFileRath(i))));
         }
+        
+        mPaddingH = new Texture(Gdx.files.internal("padding.png"));
+        mPaddingV = new Texture(Gdx.files.internal("paddingVer.png"));
     }
     
     public void setActiveObject(GameObject obj) {
@@ -42,34 +45,28 @@ public class FieldView {
     public void setModel(Model model) {
         mModel = model;
     }
-    
-    public void setNextObject(int type) {
-        mPanel.setNextObject(type);
-    }
-    
+
     public void draw(SpriteBatch batch) {
         batch.draw( FieldBg, mConfig.getHorizontalPadding()
                   , mConfig.getVerticalPadding()
                   , mConfig.getFieldUnitWidth()
                   , mConfig.getFieldUnitHeight());
-
         drawModel(batch);
         if(mActiveObj != null) {
             drawObject(batch);
         }
-
-        mPanel.draw(batch);
+        drawPaddings(batch);
     }
 
     public void drawGameOver(SpriteBatch batch) {
         float paddingLeft = mConfig.getHorizontalPadding();
         float paddingBottom = mConfig.getVerticalPadding();
         batch.draw(FieldBg, paddingLeft, paddingBottom, mConfig.getFieldUnitWidth(), mConfig.getFieldUnitHeight());
+        drawPaddings(batch);
         drawModel(batch);
-        mPanel.draw(batch);
-        
+        drawPaddings(batch);
         if(scale > 1f) scale = 1f;
-        batch.draw(mGameOverTexture, 0, 350, mConfig.getFieldUnitWidth()*scale, 100*scale);
+        batch.draw(mGameOverTexture, 0, 350, mConfig.getScreenUnitWidth()*scale, 100*scale);
         scale += 0.05;
     }
     
@@ -96,6 +93,22 @@ public class FieldView {
         }
     }
     
+    private void drawPaddings(SpriteBatch batch) {
+        float x = 0f;
+        float y = 0f;
+        batch.draw(mPaddingH, x, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
+        
+        x = mConfig.getHorizontalPadding() + mConfig.getFieldUnitWidth();
+        batch.draw(mPaddingH, x, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
+        
+        x = mConfig.getScreenUnitWidth() - mConfig.getHorizontalPadding();
+        batch.draw(mPaddingH, x, 0, mConfig.getHorizontalPadding(), mConfig.getScreenUnitHeight());
+        batch.draw(mPaddingV, 0, 0, mConfig.getScreenUnitWidth(), mConfig.getVerticalPadding());
+        
+        y = mConfig.getScreenUnitHeight() - mConfig.getVerticalPadding();
+        batch.draw(mPaddingV, 0, y, mConfig.getScreenUnitWidth(), mConfig.getVerticalPadding());
+    }
+    
     private void drawModel(SpriteBatch batch) {
         float paddingLeft = mConfig.getHorizontalPadding();
         float paddingBottom = mConfig.getVerticalPadding();
@@ -118,7 +131,8 @@ public class FieldView {
     }
     
     public void dispose() {
-        mPanel.dispose();
+        mPaddingH.dispose();
+        mPaddingV.dispose();
         mGameOverTexture.dispose();
         for(Texture text: mTextures) {
             text.dispose();

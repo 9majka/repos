@@ -122,7 +122,7 @@ public class Model {
                 mSelectedRows.add(j);
             }
         }
-        
+       
         if(!mSelectedRows.isEmpty()) {
             int next_j = 0;
             for(j = 0; j <= m_BlockHeight; j++) {
@@ -138,6 +138,7 @@ public class Model {
                 }
                 next_j++;
             }
+            mListener.onLinesDeleted(mSelectedRows.size());
         }
     }
 }

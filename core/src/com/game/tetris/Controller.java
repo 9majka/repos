@@ -10,6 +10,7 @@ import com.game.tetris.object.ObjectFactory;
 import com.game.tetris.object.GameObject.ObjectType;
 import com.game.tetris.screen.GameConfig;
 import com.game.tetris.view.FieldView;
+import com.game.tetris.view.PanelView;
 
 public class Controller implements ControllerListener, ModelListener{
     
@@ -18,11 +19,14 @@ public class Controller implements ControllerListener, ModelListener{
     private GameObject m_ActiveObj;
     private Model m_Model;
     private FieldView m_FieldView;
+    private PanelView mPanel;
     private ObjectFactory m_ObjectFactory;
     private int m_Speed = 3;
     private boolean mAcceleration = false;
     private final GameConfig m_Config;
     GameState mState = GameState.Playing;
+    
+    private int mScore = 0;
     
     public Controller(final GameConfig config) {
         m_Config = config;
@@ -30,6 +34,7 @@ public class Controller implements ControllerListener, ModelListener{
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
         m_Model.setListener(this);
         m_FieldView = new FieldView(config);
+        mPanel = new PanelView(config);
         m_ObjectFactory = new ObjectFactory(config);
         
         m_ActiveObj = m_ObjectFactory.getNextObject();
@@ -37,7 +42,7 @@ public class Controller implements ControllerListener, ModelListener{
         int shiftY = config.getFieldBlockHeight();
         m_ActiveObj.shiftTo(shiftX, shiftY);
         m_FieldView.setActiveObject(m_ActiveObj);
-        m_FieldView.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
+        mPanel.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         m_FieldView.setModel(m_Model);
     }
     
@@ -122,7 +127,7 @@ public class Controller implements ControllerListener, ModelListener{
             int shiftY = m_Config.getFieldBlockHeight();
             m_ActiveObj.shiftTo(shiftX, shiftY);
             m_FieldView.setActiveObject(m_ActiveObj);
-            m_FieldView.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
+            mPanel.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         }
     }
     
@@ -165,6 +170,11 @@ public class Controller implements ControllerListener, ModelListener{
         
     }
     
+    public void onLinesDeleted(int count) {
+        mScore += count;
+        mPanel.newScore(mScore);
+    }
+    
     @Override
     public void onGameOver() {
         mState = GameState.GameOver;
@@ -178,7 +188,12 @@ public class Controller implements ControllerListener, ModelListener{
         }
     }
     
+    public void updatePanel() {
+       mPanel.update();
+    }
+    
     public void dispose() {
+        mPanel.dispose();
         m_FieldView.dispose();
         m_ObjectFactory.dispose();
     }
