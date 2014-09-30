@@ -12,6 +12,9 @@ public class Model {
     private short m_Field[][];
     private ModelListener mListener = null;
     private Set<Integer> mSelectedRows = new HashSet<Integer>();
+    private int mScore = 0;
+    private int mLevel = 1;
+    private int mLevelStep;
 
     public Model(final int blockWidth, final int blocHeight) {
         m_BlockWidth = blockWidth;
@@ -21,6 +24,11 @@ public class Model {
             m_Field[i][0] = 1;
         }
     }
+    
+    public void setLevelStep(int step) {
+        mLevelStep = step;
+    }
+    
     
     public void setListener(ModelListener listener) {
         mListener = listener;
@@ -138,7 +146,13 @@ public class Model {
                 }
                 next_j++;
             }
-            mListener.onLinesDeleted(mSelectedRows.size());
+            mScore += mSelectedRows.size();
+            int level = (mScore / mLevelStep) + 1;
+            if(level != mLevel) {
+                mLevel = level;
+                mListener.onLevelChange(mLevel);
+            }
+            mListener.onScoreChange(mScore);
         }
     }
 }

@@ -29,7 +29,9 @@ public class GameConfig {
     private float mPaddingHor = 0f;
     private float mPaddingVert = 0f;
     
-    private int mAccelerationSpeed = 15;
+    private float mAccelerationSpeed = 25f;
+    public int mLevelStep = 10;
+    public float mSpeedStep = 0.5f;
     
     private void updateAspectRatio() {
         float aspect = (float)mScreenWidth/mScreenHeight;
@@ -72,7 +74,7 @@ public class GameConfig {
         return mPaddingVert;
     }
     
-    public int getAccelerationSpeed() {
+    public float getAccelerationSpeed() {
         return mAccelerationSpeed;
     }
     

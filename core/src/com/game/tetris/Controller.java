@@ -21,18 +21,17 @@ public class Controller implements ControllerListener, ModelListener{
     private FieldView m_FieldView;
     private PanelView mPanel;
     private ObjectFactory m_ObjectFactory;
-    private int m_Speed = 3;
+    private float m_Speed = 1.0f;
     private boolean mAcceleration = false;
     private final GameConfig m_Config;
     GameState mState = GameState.Playing;
-    
-    private int mScore = 0;
-    
+
     public Controller(final GameConfig config) {
         m_Config = config;
         Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
         m_Model.setListener(this);
+        m_Model.setLevelStep(config.mLevelStep);
         m_FieldView = new FieldView(config);
         mPanel = new PanelView(config);
         m_ObjectFactory = new ObjectFactory(config);
@@ -71,8 +70,12 @@ public class Controller implements ControllerListener, ModelListener{
     }
     
     @Override
-    public void onAccelarate() {
+    public void onAccelarateStart() {
         mAcceleration = true;
+    }
+    @Override
+    public void onAccelarateFinish() {
+        mAcceleration = false;
     }
 
     @Override
@@ -138,7 +141,7 @@ public class Controller implements ControllerListener, ModelListener{
     }
     
     private void process() {
-        int speed = m_Speed;
+        float speed = m_Speed;
         if(mAcceleration) {
             speed = m_Config.getAccelerationSpeed();
         }
@@ -167,12 +170,12 @@ public class Controller implements ControllerListener, ModelListener{
     
     @Override
     public void onLevelChange(int level) {
-        
+        mPanel.newLevel(level);
+        m_Speed += m_Config.mSpeedStep;
     }
     
-    public void onLinesDeleted(int count) {
-        mScore += count;
-        mPanel.newScore(mScore);
+    public void onScoreChange(int score) {
+        mPanel.newScore(score);
     }
     
     @Override

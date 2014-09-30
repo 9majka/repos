@@ -28,6 +28,7 @@ public class PanelView {
         }
     }
     private PreviewImage mPreviewImage;
+    private Label mLevelLabel;
     private Label mScoreLabel;
     private Array<Texture> mPreviewTextures;
     private int mNextObject = 0;
@@ -82,12 +83,12 @@ public class PanelView {
         mStage.addActor(levelLayer);
         
         Skin skin = new Skin(Gdx.files.internal("data/uiskin.json"));
-        Label label = new Label("1", skin);
-        label.setAlignment(Align.right);
-        label.setPosition(x, y - 200);
-        label.setSize(w - 5, w/2);
-        label.setFontScale(2);
-        mStage.addActor(label);
+        mLevelLabel = new Label("1", skin);
+        mLevelLabel.setAlignment(Align.right);
+        mLevelLabel.setPosition(x, y - 200);
+        mLevelLabel.setSize(w - 5, w/2);
+        mLevelLabel.setFontScale(2);
+        mStage.addActor(mLevelLabel);
         
         Image level = new Image(new Texture(Gdx.files.internal("level.png")));
         level.setPosition(x, y - 200 + w/2);
@@ -101,7 +102,7 @@ public class PanelView {
         scoreLayer.setSize(w, w/2);
         mStage.addActor(scoreLayer);
         
-        mScoreLabel = new Label("00000", skin);
+        mScoreLabel = new Label("0", skin);
         mScoreLabel.setAlignment(Align.right);
         mScoreLabel.setPosition(x, scoreY);
         mScoreLabel.setSize(w - 5, w/2);
@@ -116,6 +117,11 @@ public class PanelView {
     
     public void update() {
         mStage.draw();
+    }
+    
+    public void newLevel(int level) {
+        String str = "" + level;
+        mLevelLabel.setText(str);
     }
     
     public void newScore(int score) {

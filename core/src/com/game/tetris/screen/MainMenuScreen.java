@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
         game = gam;
         m_Config = new GameConfig();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 480, 800);
+        camera.setToOrtho(false, m_Config.getScreenUnitWidth(), m_Config.getScreenUnitHeight());
         
         mBg = new Texture(Gdx.files.internal("field_bg.jpg"));
         mLogo = new Texture(Gdx.files.internal("logo.png"));
@@ -34,7 +34,7 @@ public class MainMenuScreen implements Screen {
         game.font.setScale(2, 2);
         game.batch.begin();
         game.batch.draw(mBg, 0, 0, m_Config.getScreenUnitWidth(), m_Config.getScreenUnitHeight());
-        game.batch.draw(mLogo, 40, 400, 400, 100);
+        game.batch.draw(mLogo, 40, m_Config.getScreenUnitHeight()/2, m_Config.getScreenUnitWidth() - 80, 100);
         
         game.font.draw(game.batch, "Click to Play", 150, 100);
         game.batch.end();
@@ -48,6 +48,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         m_Config.setScreeSize(width, height);
+        camera.setToOrtho(false, m_Config.getScreenUnitWidth(), m_Config.getScreenUnitHeight());
     }
 
     @Override

@@ -29,7 +29,7 @@ public class EventController extends GestureAdapter{
             mStartPanY = stepy;
         }
         if(stepy - mStartPanY > mConfig.getAccelerationCondition()) {
-            mListener.onAccelarate();
+            mListener.onAccelarateStart();
             mStartPanY = 0;
             mPanY = false;
         }
@@ -73,6 +73,8 @@ public class EventController extends GestureAdapter{
     public boolean panStop(float x, float y, int pointer, int button) {
         mPanX = false;
         mPanY = false;
+        
+        mListener.onAccelarateFinish();
         return false;
     }
 }
