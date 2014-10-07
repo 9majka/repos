@@ -6,15 +6,16 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.utils.Array;
 import com.game.tetris.object.GameObject;
-import com.game.tetris.object.ObjectFactory;
 import com.game.tetris.object.GameObject.ObjectType;
+import com.game.tetris.object.ObjectFactory;
 import com.game.tetris.screen.GameConfig;
+import com.game.tetris.screen.GameScreen;
 import com.game.tetris.view.FieldView;
 import com.game.tetris.view.PanelView;
 
 public class Controller implements ControllerListener, ModelListener{
     
-    private enum GameState{Playing, GameOver};
+    private enum GameState{Playing, Pause, GameOver};
     
     private GameObject m_ActiveObj;
     private Model m_Model;
@@ -25,8 +26,10 @@ public class Controller implements ControllerListener, ModelListener{
     private boolean mAcceleration = false;
     private final GameConfig m_Config;
     GameState mState = GameState.Playing;
+    final GameScreen mParentScreeen;
 
-    public Controller(final GameConfig config) {
+    public Controller(GameScreen parentScreen, final GameConfig config) {
+        mParentScreeen = parentScreen;
         m_Config = config;
         Gdx.input.setInputProcessor(new GestureDetector(new EventController(this, m_Config)));
         m_Model = new Model(config.getFieldBlockWidth(), config.getFieldBlockHeight());
@@ -37,12 +40,17 @@ public class Controller implements ControllerListener, ModelListener{
         m_ObjectFactory = new ObjectFactory(config);
         
         m_ActiveObj = m_ObjectFactory.getNextObject();
-        int shiftX = config.getFieldBlockWidth()/2;
+        int shiftX = config.getFieldBlockWidth()/2 - 1;
         int shiftY = config.getFieldBlockHeight();
         m_ActiveObj.shiftTo(shiftX, shiftY);
         m_FieldView.setActiveObject(m_ActiveObj);
         mPanel.setNextObject(ObjectType.toInt(m_ObjectFactory.getNextObjectType()));
         m_FieldView.setModel(m_Model);
+    }
+    
+    public void close() {
+        m_Model.setListener(null);
+        Gdx.input.setInputProcessor(null);
     }
     
     @Override
@@ -77,12 +85,8 @@ public class Controller implements ControllerListener, ModelListener{
     public void onAccelarateFinish() {
         mAcceleration = false;
     }
-
-    @Override
-    public void onRotate() {
-        if(mState != GameState.Playing) {
-            return;
-        }
+    
+    private void rotate() {
         if(mAcceleration == true) {
             return;
         }
@@ -121,12 +125,21 @@ public class Controller implements ControllerListener, ModelListener{
         }
         m_ActiveObj.rotate();
     }
+
+    @Override
+    public void onTap() {
+        if(mState == GameState.GameOver) {
+            mParentScreeen.gameOver();
+        }else if(mState == GameState.Playing) {
+            rotate();
+        }
+    }
     
     private void continuePlay() {
         if(mState == GameState.Playing) {
             mAcceleration = false;
             m_ActiveObj = m_ObjectFactory.getNextObject();
-            int shiftX = m_Config.getFieldBlockWidth()/2;
+            int shiftX = m_Config.getFieldBlockWidth()/2 - 1;
             int shiftY = m_Config.getFieldBlockHeight();
             m_ActiveObj.shiftTo(shiftX, shiftY);
             m_FieldView.setActiveObject(m_ActiveObj);
@@ -184,9 +197,9 @@ public class Controller implements ControllerListener, ModelListener{
     }
     
     public void draw(SpriteBatch batch) {
-        if(mState == GameState.Playing) {
+        if(mState != GameState.GameOver) {
             m_FieldView.draw(batch);
-        } else if(mState == GameState.GameOver) {
+        } else {
             m_FieldView.drawGameOver(batch);
         }
     }

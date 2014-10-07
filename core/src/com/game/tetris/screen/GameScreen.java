@@ -15,7 +15,7 @@ public class GameScreen implements Screen {
     public GameScreen(final Tetris gam, GameConfig config){
         this.game = gam;
         mConfig = config;
-        controller = new Controller(config);
+        controller = new Controller(this, config);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, config.getScreenUnitWidth(), config.getScreenUnitHeight());
         //Gdx.graphics.setContinuousRendering(false);
@@ -32,6 +32,12 @@ public class GameScreen implements Screen {
         controller.draw(game.batch);
         game.batch.flush();
         game.batch.end();
+    }
+    
+    public void gameOver() {
+        controller.close();
+        game.setScreen(new MainMenuScreen(game));
+        dispose();
     }
 
     @Override

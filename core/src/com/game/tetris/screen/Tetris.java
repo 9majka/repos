@@ -25,5 +25,4 @@ public class Tetris extends Game {
         batch.dispose();
         font.dispose();
     }
-
 }

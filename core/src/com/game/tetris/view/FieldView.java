@@ -117,14 +117,13 @@ public class FieldView {
         float height = mConfig.mCellUnitHeight;
 
         int i = 0;
-        short value = 0;
-        for(int j = 1; j <= mConfig.getFieldBlockHeight(); j++) {
-            for(i = 0; i < mConfig.getFieldBlockWidth(); i++) {
-             // TODO Start /optimization find the problem 
-                value = field[i][j];
-             // TODO END /optimization find the problem 
-                if(value != 0) {
-                    batch.draw(mTextures.get(0), i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
+        for(short value = 1; value < ObjectType.toInt(ObjectType.OT_MAXObject); value++) {
+            Texture texture = mTextures.get(value);
+            for(int j = 1; j <= mConfig.getFieldBlockHeight(); j++) {
+                for(i = 0; i < mConfig.getFieldBlockWidth(); i++) {
+                    if(field[i][j] == value) {
+                        batch.draw(texture, i * width + paddingLeft, ((j - mOffset) * height) + paddingBottom, width, height);
+                    }
                 }
             }
         }

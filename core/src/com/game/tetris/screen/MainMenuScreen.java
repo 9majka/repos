@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.Texture;
 public class MainMenuScreen implements Screen {
     final Tetris game;
     private GameConfig m_Config;
-
+    private enum LoadingState {None, Start, Loading, End};
     OrthographicCamera camera;
     Texture             mBg;
     Texture             mLogo;
+    private LoadingState state = LoadingState.None;
 
     public MainMenuScreen(final Tetris gam) {
         game = gam;
@@ -28,6 +29,11 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(0, 0.2f, 0.2f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        
+        if(state == LoadingState.Loading) {
+            game.setScreen(new GameScreen(game, m_Config));
+            state = LoadingState.End;
+        }
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -36,11 +42,19 @@ public class MainMenuScreen implements Screen {
         game.batch.draw(mBg, 0, 0, m_Config.getScreenUnitWidth(), m_Config.getScreenUnitHeight());
         game.batch.draw(mLogo, 40, m_Config.getScreenUnitHeight()/2, m_Config.getScreenUnitWidth() - 80, 100);
         
-        game.font.draw(game.batch, "Click to Play", 150, 100);
+        if(state == LoadingState.None) {
+            game.font.draw(game.batch, "Click to Play", m_Config.getScreenUnitWidth() / 2 - 90, 100);
+        } else {
+            game.font.draw(game.batch, "Loading .....", m_Config.getScreenUnitWidth() / 2 - 90, 100);
+        }
         game.batch.end();
-
+        if(state == LoadingState.Start) {
+            state = LoadingState.Loading;
+        }
         if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game, m_Config));
+            state = LoadingState.Start;
+        }
+        if(state == LoadingState.End) {
             dispose();
         }
     }
@@ -71,6 +85,5 @@ public class MainMenuScreen implements Screen {
     public void dispose() {
         mLogo.dispose();
         mBg.dispose();
-        game.font.dispose();
     }
 }

@@ -18,7 +18,7 @@ public class EventController extends GestureAdapter{
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
-        mListener.onRotate();
+        mListener.onTap();
         return false;
     }
 
