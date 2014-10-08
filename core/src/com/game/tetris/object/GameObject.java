@@ -23,10 +23,10 @@ public abstract class GameObject {
     private FileHandle m_TexureFile;
     private Texture m_Texture;
     
-    public GameObject(final ObjectType type, String file, final float blockSize) {
+    public GameObject(final ObjectType type, final float blockSize) {
         m_Type = type;
         m_BlockUnitHeight = blockSize;
-        m_TexureFile = Gdx.files.internal(file);
+        m_TexureFile = Gdx.files.internal(getTextureFileRath(type));
         m_UnitY = m_ShiftY * m_BlockUnitHeight;
         initPoints();
         initTextures();
@@ -196,7 +196,7 @@ public abstract class GameObject {
             case OT_STObject:
                 return "preview/stob.png";
             default: 
-                return "drop_gray.png";
+                return "item/drop_gray.png";
         }
     }
     
@@ -208,21 +208,21 @@ public abstract class GameObject {
     public static String getTextureFileRath(ObjectType type) {
         switch (type) {
             case OT_TObject:
-                return "drop_red.png";
+                return "item/drop_red.png";
             case OT_GLObject:
-                return "drop_blue.png";
+                return "item/drop_blue.png";
             case OT_GRObject:
-                return "drop_bir.png";
+                return "item/drop_bir.png";
             case OT_SQObject:
-                return "drop_green.png";
+                return "item/drop_green.png";
             case OT_ZLObject:
-                return "drop.png";
+                return "item/drop.png";
             case OT_ZRObject:
-                return "drop_pink.png";
+                return "item/drop_pink.png";
             case OT_STObject:
-                return "drop_yellow.png";
+                return "item/drop_yellow.png";
             default: 
-                return "drop_gray.png";
+                return "item/drop_gray.png";
         }
     }
     

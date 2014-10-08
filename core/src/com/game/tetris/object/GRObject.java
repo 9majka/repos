@@ -12,7 +12,7 @@ public class GRObject extends GameObject{
     };
 
     public GRObject(final float blocSize) {
-        super(ObjectType.OT_GRObject, "drop_bir.png", blocSize);
+        super(ObjectType.OT_GRObject, blocSize);
     }
 
     @Override

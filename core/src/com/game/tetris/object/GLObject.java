@@ -11,7 +11,7 @@ public class GLObject extends GameObject{
     };
 
     public GLObject(final float blocSize) {
-        super(ObjectType.OT_GLObject, "drop_blue.png", blocSize);
+        super(ObjectType.OT_GLObject, blocSize);
     }
 
     @Override

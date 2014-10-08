@@ -11,7 +11,7 @@ public class STObject extends GameObject{
     };
 
     public STObject(final float blocSize) {
-        super(ObjectType.OT_STObject, "drop_yellow.png", blocSize);
+        super(ObjectType.OT_STObject, blocSize);
     }
 
     @Override

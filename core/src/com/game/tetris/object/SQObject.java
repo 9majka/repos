@@ -11,7 +11,7 @@ public class SQObject extends GameObject{
     };
 
     public SQObject(final float blocSize) {
-        super(ObjectType.OT_SQObject, "drop_green.png", blocSize);
+        super(ObjectType.OT_SQObject, blocSize);
     }
 
     @Override

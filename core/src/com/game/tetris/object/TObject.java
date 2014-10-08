@@ -12,7 +12,7 @@ public class TObject extends GameObject{
     };
 
     public TObject(final float blocSize) {
-        super(ObjectType.OT_TObject, "drop_red.png", blocSize);
+        super(ObjectType.OT_TObject, blocSize);
     }
 
     @Override
